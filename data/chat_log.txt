@@ -55,3 +55,7 @@ You: <__main__.vA object at 0x0000024A38709410>
 Ai: YouTube is an online video streaming platform owned by Google. It allows users to watch, upload, comment, and share videos. YouTube also offers a premium subscription service called YouTube Premium, which provides ad-free access to all of its content, as well as access to exclusive content produced by YouTube.
 You: <__main__.vA object at 0x0000017B41EF7010>
 Ai: Google is a multinational technology company that specializes in Internet-related services and products. It was founded in 1998 by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University in California. Google's mission statement is "to organize the world's information and make it universally accessible
+You: <__main__.vA object at 0x00000136A486BF50>
+Ai: Sorry, I don't understand what you are asking. Could you please rephrase your question?
+You: <__main__.vA object at 0x00000136A486BF50>
+Ai: Sorry, I don't understand what you are asking. Could you please rephrase your question?

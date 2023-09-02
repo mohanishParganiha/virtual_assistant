@@ -53,8 +53,10 @@ available_voices = loadOnStartup['settings'][0]['available_voices']
 current_profile = loadOnStartup['profile'][0]['current_profile']
 available_profiles = loadOnStartup['profile'][0]['available_profiles']
 
-openai.api_key = api_key
-
+if api_key is not None:
+    openai.api_key = api_key
+else:
+    openai.api_key = "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"
 
 class worker(QObject):
     finished = pyqtSignal()
@@ -1082,10 +1084,10 @@ def confirmSave():
         ,QMessageBox.Yes|QMessageBox.No,QMessageBox.No)
         if reply == QMessageBox.Yes:
             if ui.stackedWidget.currentIndex() == 1:
-                api_key = ui.openAiKeyLineEdit.text()
+                local_api_key = ui.openAiKeyLineEdit.text()
                 selected_voice_str = ui.selectVoiceComboBox.currentText()
-                checkApiKey()
-                update_load_file(entered_api_key=api_key,selected_voice=selected_voice_str)
+                # checkApiKey()
+                update_load_file(entered_api_key=local_api_key,selected_voice=selected_voice_str)
             elif ui.stackedWidget.currentIndex() == 3:
                 selected_profile_gui = ui.selectProfileComboBox.currentText()
                 update_load_file(selected_profile=selected_profile_gui)
@@ -1110,11 +1112,11 @@ def getEnteredProfile():
 
 
 #function that sets the field in settings json file
-def update_load_file(selected_voice=None,selected_profile=None,added_profile=None,entered_api_key=None):
+def update_load_file(selected_voice=None, selected_profile=None, added_profile=None, entered_api_key=None):
         with open(cd+'\\data\\loadOnStartup.json','r') as file:
             loadOnStartup = json.load(file)
             
-        if (not api_key is None) and (not api_key==entered_api_key) and (not entered_api_key =='' ) :
+        if entered_api_key is not None and api_key!=entered_api_key and entered_api_key !='' :
             loadOnStartup['settings'][0]['api_key'] = entered_api_key
         
         elif (not selected_voice is None) and (not current_voice == selected_voice):
@@ -1130,7 +1132,7 @@ def update_load_file(selected_voice=None,selected_profile=None,added_profile=Non
 
         with open(cd+"\\data\\loadOnStartup.json","w") as file:
             json.dump(loadOnStartup,file,indent=4)
-        sleep(0.5)
+        sleep(1)
         os.execl(sys.executable,sys.executable,*sys.argv)
 
 
