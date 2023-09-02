@@ -1,0 +1,32 @@
+{	
+	"intents":[
+        {
+            "tag":"open",
+            "patterns":["open","launch","start","visit","search"
+            ],
+            "responses":["open"
+            ]
+        },
+        {
+            "tag":"whatsapp",
+            "patterns":["whatsapp","message","chat","send message","send chat","send whatsapp"
+            ],
+            "responses":["whatsapp"
+            ]
+        },
+        {
+            "tag":"email",
+            "patterns":["email","send email","compose email","write email","mail","send mail","compose mail","write mail","compose"
+            ],
+            "responses":["email"
+            ]
+        },
+        {
+            "tag":"list",
+            "patterns":["make list","take list","take notes","make notes","note","list"
+            ],
+            "responses":["list"
+            ]
+        }
+    	]
+}

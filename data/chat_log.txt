@@ -1,0 +1,57 @@
+You: Hello
+Sam: Hello sir, how may I help you
+You: Tell me about you
+Sam: I'm sam an artificial voice assistant developed as a   project.
+You: What can you do.
+Sam: I can help you with alarms, calender, notes, desktop automation, webautomation and more as new features are added.
+You: <maingui.vA object at 0x0000027255ED18D0>
+Ai: This is not a valid email address. Please provide a valid email address.
+You: <maingui.vA object at 0x000001E14B1F2310>
+Ai: SSTC stands for Self-Service Ticketing Center. It is a web-based ticketing system that allows customers to purchase tickets online and manage their own ticketing needs. The system provides customers with an easy-to-use interface to search for events, purchase tickets, and manage their
+You: <maingui.vA object at 0x000001E14B1F2310>
+Ai: SSTC College is a private college located in the city of Hyderabad, India. It was established in 2003 and is affiliated to Osmania University. The college offers undergraduate and postgraduate courses in various disciplines such as engineering, management, computer applications, science and humanities. The college has a
+You: <maingui.vA object at 0x000001E14B1F2310>
+Ai: Shri Shankaracharya Technical Campus (SSTC) is a private engineering college located in Bhilai, Chhattisgarh, India. It was established in 2009 and is affiliated to Chhattisgarh Swami Vivekanand Technical University. The college offers undergraduate and
+
+You: <maingui.vA object at 0x0000019730640150>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <maingui.vA object at 0x000001E2AD649B10>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <maingui.vA object at 0x000001E2AD649B10>
+Ai: This is an object in the Python programming language. It is not a valid response to your question.
+You: <maingui.vA object at 0x000001E2AD649B10>
+Ai: This is an object in the Python programming language. It is not a valid response to your question.
+You: <maingui.vA object at 0x000001E2AD649B10>
+Ai: This is an object reference, which means it is a reference to an object in memory. It cannot be used directly, but it can be used to access the object that it references.
+You: <testfile.vA object at 0x000001348BAE9290>
+Ai: This is not a valid response. Please provide a valid response to the question.
+You: <testfile.vA object at 0x0000023ECA6C3FD0>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <testfile.vA object at 0x0000023ECA6C3FD0>
+Ai: This is not a valid response. Please provide a valid response to the question.
+You: <testfile.vA object at 0x0000021B6B93B750>
+Ai: This is not a valid response. Please provide a valid response to the question.
+You: <testfile.vA object at 0x00000170550443D0>
+Ai: This is not a valid response. Please provide a valid response to the question.
+You: <testfile.vA object at 0x0000020796658890>
+Ai: This is not a valid response. Please provide a valid response to the question.
+You: <__main__.vA object at 0x000001C15ECD1A50>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <__main__.vA object at 0x0000026BE0EECA50>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <__main__.vA object at 0x0000026BE0EECA50>
+Ai: This is a reference to an object of type vA.
+You: <__main__.vA object at 0x000002625D580B50>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <__main__.vA object at 0x000002625D580B50>
+Ai: This is an object of the vA class.
+You: <__main__.vA object at 0x00000243E4437290>
+Ai: This is a reference to an object of type vA.
+You: <__main__.vA object at 0x00000277F46BB810>
+Ai: This is a reference to an object of type vA. It is not a meaningful response to your question.
+You: <__main__.vA object at 0x0000028D10AEB250>
+Ai: YouTube is a video-sharing platform owned by Google. It allows users to upload, view, rate, share, add to playlists, report, comment on videos, and subscribe to other users. It offers a wide variety of user-generated and corporate media videos. Available content includes video clips
+You: <__main__.vA object at 0x0000024A38709410>
+Ai: YouTube is an online video streaming platform owned by Google. It allows users to watch, upload, comment, and share videos. YouTube also offers a premium subscription service called YouTube Premium, which provides ad-free access to all of its content, as well as access to exclusive content produced by YouTube.
+You: <__main__.vA object at 0x0000017B41EF7010>
+Ai: Google is a multinational technology company that specializes in Internet-related services and products. It was founded in 1998 by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University in California. Google's mission statement is "to organize the world's information and make it universally accessible

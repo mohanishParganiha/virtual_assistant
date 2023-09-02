@@ -1,0 +1,26 @@
+{
+    "settings": [
+        {
+            "api_key": null,
+            "current_voice": "Microsoft George - English (United Kingdom)",
+            "available_voices": [
+                "Microsoft David Desktop - English (United States)",
+                "Microsoft Hazel Desktop - English (Great Britain)",
+                "Microsoft George - English (United Kingdom)",
+                "Microsoft Zira Desktop - English (United States)"
+            ]
+        }
+    ],
+    "profile": [
+        {
+            "current_profile": "profile1",
+            "available_profiles": [
+                "profile1",
+                "profile2",
+                "profile3",
+                "profile4",
+                "profile5"
+            ]
+        }
+    ]
+}
