@@ -58,6 +58,11 @@ if api_key is not None:
 else:
     openai.api_key = "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"
 
+
+
+with open(cd+"\\updatedStyleSheet.txt","r") as file:
+    stream = file.read()
+
 class worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(str)
@@ -226,87 +231,8 @@ class Ui_MainWindow(QMainWindow, QObject):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(800, 810))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        MainWindow.setStyleSheet("*{\n"
-                                 "color: white;\n"
-                                 "background:#313131;\n"
-                                 "font: 14px \"Courier New\";\n"
-                                 "}\n"
-                                 "\n"
-                                 "#centralwidget{\n"
-                                 "border-radius:5px;\n"
-                                 "border:2px solid#FFD369;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#frame,#frame_3,#frame_5,#frame_6,#selectProfileLabel,#openAiKeyLabel,#selectVoiceLabel,#addProfileLabel{\n"
-                                 "background:#414141;\n"
-                                 "border:2px solid #FFD369;\n"
-                                 "border-radius:10px;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#openAiKeyFrame,#selectVoiceFrame,#footerSettingsPage,#selectProfileFrame,#addProfileFrame1,#addProfileFrame2,#profilePageSaveFrame{"
-                                 "background:#414141;\n"
-                                 "}\n"
-                                 "\n"
-                                #  "#{"
-                                #  "}\n"
-                                #  "\n"
-                                 "#frame_2{\n"
-                                 "background:#2e2e2e;\n"
-                                 "border:2px solid #FFD369;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#groupBox{\n"
-                                 "border:0pt solid #2e2e2e;\n"
-                                 "border-radius:10px;\n"
-                                 "background:#2e2e2e;\n"
-                                 "\n"
-                                 "}\n"
-                                 "\n"
-                                 "#mainMnuBtn,#settingBtn,#profileBtn,#cameraBtn{\n"
-                                 "background:#2e2e2e;\n"
-                                 "border:none;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#mainMnuBtn:pressed,#settingBtn:pressed#profileBtn:pressed,#cameraBtn:pressed{\n"
-                                 "background:#2e2e2e;\n"
-                                 "border:none;\n"
-                                 "}\n"
-                                 "\n"
-                                 "\n"
-                                 "#saveSettingsButton,#cancelSettingsButton,#addProfile,#saveProfileButton,#cancelProfileButton{"
-                                 "color:white;\n"
-                                 "border:2px solid #FFD369;\n"
-                                 "border-radius:14px;\n"
-
-                                 "}\n"
-                                 "\n"
-                                 "#clearChat,#inputChat{\n"
-                                 "font-size:14px;\n"
-                                 "color: white;\n"
-                                 "border:2px solid #FFD369;\n"
-                                 "border-radius:16px;\n"
-                                 "background:#2e2e2e;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#clearChat:hover,#inputChat:hover{\n"
-                                 "background:#404040;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#clearChat:pressed,#inputChat:pressed{\n"
-                                 "background:solid red;\n"
-                                 "}\n"
-                                 "\n"
-                                 "\n"
-                                 "#aiResponse,#userInput{\n"
-                                 "color: white;\n"
-                                 "background:#414141;\n"
-                                 "border:none;\n"
-                                 "font-size:14px;\n"
-                                 "}\n"
-                                 "\n"
-                                 "#line{\n"
-                                 "background:#FFD369;\n"
-                                 "}")
+        MainWindow.setStyleSheet(stream)
+        
         MainWindow.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
