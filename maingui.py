@@ -60,7 +60,7 @@ else:
 
 
 
-with open(cd+"\\updatedStyleSheet.txt","r") as file:
+with open(cd+"\\darkModeStyleSheet.txt","r") as file:
     stream = file.read()
 
 class worker(QObject):
@@ -231,7 +231,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(800, 810))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        MainWindow.setStyleSheet(stream)
         
         MainWindow.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -597,9 +596,58 @@ class Ui_MainWindow(QMainWindow, QObject):
             self.selectVoiceComboBox.setCurrentIndex(selectVoiceComboBoxIndex)
         self.horizontalLayout_5.addWidget(self.selectVoiceComboBox)
         self.verticalLayout_3.addWidget(self.selectVoiceFrame)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_3.addItem(spacerItem6)
-
+        
+        self.themeSettingFrame = QtWidgets.QFrame(self.frame_5)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.themeSettingFrame.sizePolicy().hasHeightForWidth())
+        self.themeSettingFrame.setSizePolicy(sizePolicy)
+        self.themeSettingFrame.setMinimumSize(QtCore.QSize(0, 50))
+        self.themeSettingFrame.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.themeSettingFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.themeSettingFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.themeSettingFrame.setObjectName("themeSettingFrame")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.themeSettingFrame)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.label = QtWidgets.QLabel(self.themeSettingFrame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        self.label.setMinimumSize(QtCore.QSize(150, 30))
+        self.label.setMaximumSize(QtCore.QSize(150, 30))
+        self.label.setObjectName("label")
+        self.horizontalLayout_11.addWidget(self.label)
+        self.lightModeCheckBox = QtWidgets.QCheckBox(self.themeSettingFrame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lightModeCheckBox.sizePolicy().hasHeightForWidth())
+        self.lightModeCheckBox.setSizePolicy(sizePolicy)
+        self.lightModeCheckBox.setMinimumSize(QtCore.QSize(130, 30))
+        self.lightModeCheckBox.setMaximumSize(QtCore.QSize(130, 30))
+        self.lightModeCheckBox.setObjectName("lightModeCheckBox")
+        self.lightModeCheckBox.setAutoExclusive(True)
+        self.horizontalLayout_11.addWidget(self.lightModeCheckBox)
+        self.darkModeCheckBox_2 = QtWidgets.QCheckBox(self.themeSettingFrame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.darkModeCheckBox_2.sizePolicy().hasHeightForWidth())
+        self.darkModeCheckBox_2.setSizePolicy(sizePolicy)
+        self.darkModeCheckBox_2.setMinimumSize(QtCore.QSize(130, 30))
+        self.darkModeCheckBox_2.setMaximumSize(QtCore.QSize(130, 30))
+        self.darkModeCheckBox_2.setObjectName("darkModeCheckBox_2")
+        self.darkModeCheckBox_2.setAutoExclusive(True)
+        self.horizontalLayout_11.addWidget(self.darkModeCheckBox_2)
+        self.verticalLayout_3.addWidget(self.themeSettingFrame)
+        
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem7)
 
         self.footerSettingsPage = QtWidgets.QFrame(self.frame_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -626,7 +674,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.saveSettingsButton.setCheckable(True)
         self.saveSettingsButton.setFlat(True)
         self.saveSettingsButton.setObjectName("saveSettingsButton")
-        # self.saveSettingsButton.setText("SAVE")
         self.horizontalLayout_9.addWidget(self.saveSettingsButton)
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_9.addItem(spacerItem8)
@@ -640,7 +687,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.cancelSettingsButton.setCheckable(True)
         self.cancelSettingsButton.setFlat(True)
         self.cancelSettingsButton.setObjectName("cancelSettingsButton")
-        # self.cancelSettingsButton.setText("CANCEL")
         self.horizontalLayout_9.addWidget(self.cancelSettingsButton)
         self.verticalLayout_3.addWidget(self.footerSettingsPage)
         self.verticalLayout_6.addWidget(self.frame_5)
@@ -900,6 +946,9 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.inputChat.setText(_translate("MainWindow", "SEND CHAT"))
         self.openAiKeyLabel.setText(_translate("MainWindow", "OpenAi API Key"))
         self.selectVoiceLabel.setText(_translate("MainWindow", "Select Voice"))
+        self.label.setText(_translate("MainWindow", "Set Theme"))
+        self.lightModeCheckBox.setText(_translate("MainWindow", "Light Mode"))
+        self.darkModeCheckBox_2.setText(_translate("MainWindow", "Dark Mode"))
         self.saveSettingsButton.setText(_translate("MainWindow", "SAVE"))
         self.cancelSettingsButton.setText(_translate("MainWindow", "CANCEL"))
         self.selectProfileLabel.setText(_translate("MainWindow", "Select Profile"))
@@ -1068,6 +1117,7 @@ def update_load_file(selected_voice=None, selected_profile=None, added_profile=N
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
+
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
@@ -1080,5 +1130,6 @@ if __name__ == "__main__":
     ui.saveProfileButton.clicked.connect(confirmSave)
     
 
+    app.setStyleSheet(stream)
     MainWindow.show()
     sys.exit(app.exec_())

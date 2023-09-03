@@ -244,7 +244,7 @@ background:#FFD369;
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="iconResource.qrc">
+             <iconset resource="../mini/iconResource.qrc">
               <normaloff>:/icons/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg</normaloff>:/icons/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg</iconset>
             </property>
             <property name="iconSize">
@@ -310,7 +310,7 @@ background:#FFD369;
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="iconResource.qrc">
+             <iconset resource="../mini/iconResource.qrc">
               <normaloff>:/icons/resource/Breeze KDE-Story-Dark/devices/22/camera-photo.svg</normaloff>:/icons/resource/Breeze KDE-Story-Dark/devices/22/camera-photo.svg</iconset>
             </property>
             <property name="iconSize">
@@ -379,7 +379,7 @@ background:#FFD369;
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="iconResource.qrc">
+             <iconset resource="../mini/iconResource.qrc">
               <normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg</normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg</iconset>
             </property>
             <property name="iconSize">
@@ -451,7 +451,7 @@ background:#FFD369;
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="iconResource.qrc">
+             <iconset resource="../mini/iconResource.qrc">
               <normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg</normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg</iconset>
             </property>
             <property name="iconSize">
@@ -511,7 +511,7 @@ background:#FFD369;
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="iconResource.qrc">
+          <iconset resource="../mini/iconResource.qrc">
            <normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg</normaloff>:/icons/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg</iconset>
          </property>
          <property name="iconSize">
@@ -552,7 +552,7 @@ background:#FFD369;
        </size>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="home">
        <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1015,6 +1015,127 @@ background:#FFD369;
                   <width>16777215</width>
                   <height>30</height>
                  </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="spacer9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QFrame" name="themeSettingFrame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Set Theme</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="lightModeCheckBox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Light Mode</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="darkModeCheckBox_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Dark Mode</string>
                 </property>
                </widget>
               </item>
@@ -1515,8 +1636,8 @@ background:#FFD369;
   </action>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
-  <include location="iconResource.qrc"/>
+  <include location="../mini/resource.qrc"/>
+  <include location="../mini/iconResource.qrc"/>
  </resources>
  <connections>
   <connection>
