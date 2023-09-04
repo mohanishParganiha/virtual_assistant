@@ -1,8 +1,8 @@
 *{
 
-color: white;
+color: black;
 
-background:#313131;
+background:#F7FBFC;
 
 font: 14px Courier New;
 
@@ -13,16 +13,16 @@ font: 14px Courier New;
 
 border-radius:5px;
 
-border:2px solid#FFD369;
+border:2px solid#769FCD;
 
 }
 
 
 #frame,#frame_3,#frame_5,#frame_6,#selectProfileLabel,#openAiKeyLabel,#selectVoiceLabel,#addProfileLabel{
 
-background:#414141;
+background:#D6E6F2;
 
-border:2px solid #FFD369;
+border:2px solid #769FCD;
 
 border-radius:10px;
 
@@ -30,27 +30,27 @@ border-radius:10px;
 
 
 #openAiKeyFrame,#selectVoiceFrame,#footerSettingsPage,#selectProfileFrame,#addProfileFrame1,#addProfileFrame2,#profilePageSaveFrame{
-background:#414141;
+background:#D6E6F2;
 
 }
 
 
 #frame_2{
 
-background:#2e2e2e;
+background:#B9D7EA;
 
-border:2px solid #FFD369;
+border:2px solid #769FCD;
 
 }
 
 
 #groupBox{
 
-border:0pt solid #2e2e2e;
+border:0pt solid #769FCD;
 
 border-radius:10px;
 
-background:#2e2e2e;
+background:#B9D7EA;
 
 
 }
@@ -58,7 +58,7 @@ background:#2e2e2e;
 
 #mainMnuBtn,#settingBtn,#profileBtn,#cameraBtn{
 
-background:#2e2e2e;
+background:#B9D7EA;
 
 border:none;
 
@@ -67,7 +67,7 @@ border:none;
 
 #mainMnuBtn:pressed,#settingBtn:pressed#profileBtn:pressed,#cameraBtn:pressed{
 
-background:#2e2e2e;
+background:#B9D7EA;
 
 border:none;
 
@@ -75,9 +75,9 @@ border:none;
 
 
 #saveSettingsButton,#cancelSettingsButton,#addProfile,#saveProfileButton,#cancelProfileButton{
-color:white;
+color:black;
 
-border:2px solid #FFD369;
+border:2px solid #769FCD;
 
 border-radius:14px;
 
@@ -89,36 +89,36 @@ border-radius:14px;
 
 font-size:14px;
 
-color: white;
+color: black;
 
-border:2px solid #FFD369;
+border:2px solid #769FCD;
 
 border-radius:16px;
 
-background:#2e2e2e;
+background:#B9D7EA;
 
 }
 
 
 #clearChat:hover,#inputChat:hover{
-color:black;
-background:#EEEEEE;
+
+background:#068FFF;
 
 }
 
 
 #clearChat:pressed,#inputChat:pressed{
 
-background:solid red;
+background:#769FCD;
 
 }
 
 
 #aiResponse,#userInput{
 
-color: white;
+color: black;
 
-background:#414141;
+background:#F7FBFC;
 
 border:none;
 
@@ -128,18 +128,22 @@ font-size:14px;
 
 #line{
 
-background:#FFD369;
+background:#769FCD;
 
 }
 
 #runButton{
-background: #2d2d2d;
+background: #769FCD;
 border-radius:100px;
-color: white;
+color: black;
 font-size:25px;
 }
 
 #runButton:hover {
-color:balck;
-background: #EEEEEE;
+background: #068FFF;
 }
+#runButton:checked{
+color:balck;
+background: #00DFA2;
+}
+
