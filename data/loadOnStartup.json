@@ -1,14 +1,16 @@
 {
     "settings": [
         {
-            "api_key": "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",
+            "api_key": "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",
             "current_voice": "Microsoft George - English (United Kingdom)",
             "available_voices": [
                 "Microsoft David Desktop - English (United States)",
                 "Microsoft Hazel Desktop - English (Great Britain)",
                 "Microsoft George - English (United Kingdom)",
                 "Microsoft Zira Desktop - English (United States)"
-            ]
+            ],
+            "theme": "light_mode",
+            "devices": []
         }
     ],
     "profile": [

@@ -85,7 +85,7 @@ border-radius:14px;
 }
 
 
-#clearChat,#inputChat{
+#clearChat{
 
 font-size:14px;
 
@@ -100,21 +100,21 @@ background:#2e2e2e;
 }
 
 
-#clearChat:hover,#inputChat:hover{
+#clearChat:hover{
 color:black;
 background:#EEEEEE;
 
 }
 
 
-#clearChat:pressed,#inputChat:pressed{
+#clearChat:pressed{
 
 background:solid red;
 
 }
 
 
-#aiResponse,#userInput{
+#aiResponse{
 
 color: white;
 
@@ -123,12 +123,6 @@ background:#414141;
 border:none;
 
 font-size:14px;
-
-}
-
-#line{
-
-background:#FFD369;
 
 }
 

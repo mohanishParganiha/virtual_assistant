@@ -16,17 +16,44 @@
         },
         {
             "tag":"email",
-            "patterns":["email","send email","compose email","write email","mail","send mail","compose mail","write mail","compose"
+            "patterns":["email","send email","compose email","write email","mail","send mail",
+            "compose mail","write mail","compose","write a email","write a mail","compose a email",
+            "compose a mail"
             ],
             "responses":["email"
             ]
         },
         {
             "tag":"list",
-            "patterns":["make list","take list","take notes","make notes","note","list"
+            "patterns":["make list","take list","take notes","make notes","note","list",
+            "make a list","make a note","take a note","make a note"
             ],
             "responses":["list"
             ]
+        },
+        {
+            "tag":"current_weather",
+            "patterns":["current weather","todays weather","weather now"
+            ],
+            "responses":["current_weather"]
+        },
+        {
+            "tag":"tomorrows_weather",
+            "patterns":["tomorrow's weather","tomorrows weather","rain tomorrow","raining tomorrow","rainy tomorrow","cloudy tomorrow",
+            "sunny tomorrow","clear tomorrow","stormy tomorrow","hot tomorrow","cold tomorrow","chilly tomorrow","humid tomorrow","humidity tomorrow","will it rain tomorrow","will it be cloudy tomorrow",
+            "will it be sunny tomorrow","will it be clear tomorrow","will it be stormy tomorrow"
+            ],
+            "responses":["tomorrows_weather"]
+        },
+        {
+            "tag":"forcast_weather",
+            "patterns":["mondays weather","tuesdays weather","wednesdays weather",
+            "fridays weather","thursdays weather","fridays weather",
+            "saturdays weather","sundays weather","monday's weather","tuesday's weather","wednesday's weather",
+            "friday's weather","thursday's weather","friday's weather",
+            "saturday's weather","sunday's weather"
+            ],
+            "responses":["forcast_weather"]
         }
     	]
 }

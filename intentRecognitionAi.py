@@ -231,19 +231,34 @@ def TasksExecutor(query):
 
 
 def mainTaskExecutor(query):
-    task = str(query).lower()
     taskNew = str(query).lower()
-    ReturnedData = TasksExecutor(task)
+    ReturnedData = str(TasksExecutor(taskNew))
 
-    if "open" in str(ReturnedData):
-        value = openExe(taskNew)
+    if "open" in ReturnedData:
+        value = openExe(taskNew,)
         return value
-    elif "whatsapp" in str(ReturnedData):
+    
+    elif "whatsapp" in ReturnedData:
         value=openExe(taskNew)
         return value
     
-    elif "email" in str(ReturnedData):
-        value=openExe(taskNew)
+    elif "email" in ReturnedData:
+        value=openExe(ReturnedData)
         return value
-    elif "list" in str(ReturnedData):
+    
+    elif "list" in ReturnedData:
         return "list"
+    
+    elif "current_weather" in ReturnedData:
+        value = openExe(ReturnedData)
+        return value
+    
+    elif "tomorrows_weather" in ReturnedData:
+        value = openExe(ReturnedData)
+        return value
+    
+    elif "forcast_weather" in ReturnedData:
+        task = ReturnedData +" "+taskNew
+        value = openExe(task)
+        
+        return value

@@ -19,6 +19,7 @@ import openai
 import pyttsx3
 import speech_recognition as sr
 from intentRecognitionAi import mainTaskExecutor
+import pyowm
 import os
 import sys
 import json 
@@ -52,16 +53,20 @@ current_voice = loadOnStartup['settings'][0]['current_voice']
 available_voices = loadOnStartup['settings'][0]['available_voices']
 current_profile = loadOnStartup['profile'][0]['current_profile']
 available_profiles = loadOnStartup['profile'][0]['available_profiles']
-
+current_theme = loadOnStartup['settings'][0]['theme']
 if api_key is not None:
     openai.api_key = api_key
 else:
-    openai.api_key = "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"
-
+    openai.api_key = "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"
 
 
 with open(cd+"\\darkModeStyleSheet.txt","r") as file:
-    stream = file.read()
+        darkModeStyleSheet = file.read()
+
+with open(cd+"\\lightModeStyleSheet.txt","r") as file:
+        lightModeStyleSheet = file.read()
+
+
 
 class worker(QObject):
     finished = pyqtSignal()
@@ -75,39 +80,108 @@ class worker(QObject):
 
 
     def run(self):
-
         while self.thread_running:
 
             while self.is_running:
 
-                self.wakeup, self.query = self.ai.wakeUp()
+                self.wakeup, query = self.ai.wakeUp()
+                counter=0
 
                 if self.wakeup:
 
-                    self.progress.emit(f'You: {self.query}\n\nSam: Hello sir how may I help you\n\n')
+                    self.progress.emit(f'You: {query}\n\nSam: Hello sir how may I help you\n\n')
                     self.ai.speak("Hello sir how may I help you")
 
-                    while self.is_running:
+                    while self.is_running and counter != 3:
 
-                        self.query = self.ai.listen()
+                        query = self.ai.listen()
 
-                        if not 'none' in self.query:
+                        if not 'none' in query:
 
-                            self.progress.emit("You: " + self.query + "\n\n")
-                            valueReturned = mainTaskExecutor(self.query)
+                            self.progress.emit("You: " + query + "\n\n")
+                            valueReturned = mainTaskExecutor(query)
 
-                            if valueReturned:
+                            if valueReturned is True:
                                 pass
 
-                            elif "goodbye" in self.query:
+                            elif "goodbye" in query:
                                 self.progress.emit("Sam: Have a good day sir\n\n")
                                 self.ai.speak("Have a good day sir")
 
+
+                            elif 'email' in valueReturned:
+                                self.ai.speak('Certainly, please specify the reciver of this mail')
+                                reciver_name = self.ai.listen(ptimeLimit=4)
+                                self.ai.speak(f'reciver is {reciver_name} , please specify the subject of mail')
+                                subject = self.ai.listen()
+                                self.ai.speak(f"subject of the mail is {subject} ,please specify the contents of mail")
+                                message = self.ai.listen()
+                                self.ai.speak(f'please wait a moment ,sending mail to {reciver_name}')
+                            
+                            elif 'current_weather' in valueReturned:
+                                valueReturned.remove('current_weather')
+                                # print(valueReturned)
+
+                            elif 'tomorrows_weather' in valueReturned:
+                                valueReturned.remove('tomorrows_weather')
+                                print(query)
+                                weather_condition_list = ['rain tomorrow','raining tomorrow','rainy tomorrow','sunny tomorrow','clear tomorrow',
+                                'cloudy tomorrow','partialy cloudy tomorrow','stormy tomorrow','tomorrows weather',"tomorrow's weather"]
+                                match = [item for item in weather_condition_list if item in query]
+                                match = match[0]
+                                while True:
+                                    if  match in ['rain tomorrow','raining tomorrow','rainy tomorrow']:
+                                        if valueReturned[2]:
+                                            self.ai.speak(f'yes it will be {match}')
+                                        else:
+                                            self.ai.speak(f'no it will not be {match}')
+                                        break
+                                    elif match in ['sunny tomorrow','clear tomorrow']:
+                                        if valueReturned[0]:
+                                            self.ai.speak(f'yes it will be {match}')
+                                        else:
+                                            self.ai.speak(f'no it will not be {match}')
+                                        break
+                                    elif match in ['cloudy tomorrow','partialy cloudy tomorrow']:
+                                        if valueReturned[1]:
+                                            self.ai.speak(f'yes it will be {match}')
+                                        else:
+                                            self.ai.speak(f'no it will not be {match}')
+                                        break
+                                    elif match in ['stormy tomorrow']:
+                                        if valueReturned[3]:
+                                            self.ai.speak(f'yes it will be {match}')
+                                        else:
+                                            self.ai.speak(f'no it will not be {match}')
+                                        break
+                                    elif match in ['tomorrows weather',"tomorrow's weather"]:
+                                        data = valueReturned[4]
+                                        for keys  in data:
+                                            self.ai.speak(keys)
+                                            self.ai.speak(data[keys])
+                                        break
+                            elif 'forecast_weather' in valueReturned:
+                                valueReturned.remove('forecast_weather')
+                                # print(valueReturned)
+
+                            # elif "list" in valueReturned:
+                            #     count = 0
+                            #     self.ai.speak("Certainly, Please specify the topic.")
+                            #     topic = self.ai.listen()
+                            #     self.ai.speak(f"created and saved the list by name{topic}")
+                            #     self.ai.speak(f'do you want to add items in the list {topic} now')
+                            #     query = self.ai.listen()
+                            #     if 'yes'
+                            #     if 'add' in query:
+                            #         add_to_list(query)
+                            #     elif 'delete' in query or 'remove' in query:
+                          
                             else:
-                                response = self.ai.understand(self.query)
+                                response = self.ai.understandQuery(query)
                                 self.ai.speak(response)
                                 self.progress.emit("Sam: " + response + "\n\n")
-
+                        else:
+                            counter += 1
         QCoreApplication.processEvents()
 
         self.finished.emit()
@@ -153,6 +227,7 @@ class vA():
         for voice in self.voices:
             if voice.name == current_voice:
                 self.engine.setProperty("voice",voice.id)
+        self.engine.setProperty('rate',153)
 
     def speak(self, text):
         self.engine.say(text)
@@ -192,7 +267,7 @@ class vA():
         else:
             self.speak("Good Evening!")
 
-    def understand(question, chat_log=None):
+    def understandQuery(question, chat_log=None):
         file_path = os.path.dirname(os.path.abspath(sys.argv[0]))
 
         fileLog = open(file_path + "\\data\\chat_log.txt", "r")
@@ -212,11 +287,14 @@ class vA():
             presence_penalty=0
         )
         ans = response.choices[0].text.strip()
-        chat_log_template_update = chat_log_template + f"\nYou: {str(question)}\nAi: {ans}"
+        chat_log_template_update = chat_log_template + f"\nYou: {str(question)}\nSam: {ans}"
         fileLog = open(file_path + "\\data\\chat_log.txt", "w")
         fileLog.write(chat_log_template_update)
         fileLog.close()
         return ans
+    
+
+
 
 
 class Ui_MainWindow(QMainWindow, QObject):
@@ -231,7 +309,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(800, 810))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        
+       
         MainWindow.setAnimated(True)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -459,17 +537,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.clearChat.setFlat(True)
         self.clearChat.setObjectName("clearChat")
         self.horizontalLayout_4.addWidget(self.clearChat)
-        self.inputChat = QtWidgets.QPushButton(self.widget_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.inputChat.sizePolicy().hasHeightForWidth())
-        self.inputChat.setSizePolicy(sizePolicy)
-        self.inputChat.setMinimumSize(QtCore.QSize(150, 40))
-        self.inputChat.setCheckable(True)
-        self.inputChat.setFlat(True)
-        self.inputChat.setObjectName("inputChat")
-        self.horizontalLayout_4.addWidget(self.inputChat)
         self.verticalLayout_9.addWidget(self.widget_2)
         self.frame_3 = QtWidgets.QFrame(self.widget)
         self.frame_3.setEnabled(True)
@@ -492,20 +559,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.aiResponse.setReadOnly(True)
         self.aiResponse.setObjectName("aiResponse")
         self.horizontalLayout_3.addWidget(self.aiResponse)
-        self.line = QtWidgets.QFrame(self.frame_3)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
-        self.line.setSizePolicy(sizePolicy)
-        self.line.setMinimumSize(QtCore.QSize(0, 0))
-        self.line.setFrameShape(QtWidgets.QFrame.VLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
-        self.horizontalLayout_3.addWidget(self.line)
-        self.userInput = QtWidgets.QPlainTextEdit(self.frame_3)
-        self.userInput.setObjectName("userInput")
-        self.horizontalLayout_3.addWidget(self.userInput)
         self.verticalLayout_9.addWidget(self.frame_3)
         self.verticalLayout.addWidget(self.widget)
         self.verticalLayout_7.addWidget(self.frame_4)
@@ -514,7 +567,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.settingspage.setObjectName("settingspage")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.settingspage)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
-
         self.frame_5 = QtWidgets.QFrame(self.settingspage)
         self.frame_5.setMinimumSize(QtCore.QSize(200, 760))
         self.frame_5.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -633,19 +685,19 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.lightModeCheckBox.setObjectName("lightModeCheckBox")
         self.lightModeCheckBox.setAutoExclusive(True)
         self.horizontalLayout_11.addWidget(self.lightModeCheckBox)
-        self.darkModeCheckBox_2 = QtWidgets.QCheckBox(self.themeSettingFrame)
+        self.darkModeCheckBox = QtWidgets.QCheckBox(self.themeSettingFrame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.darkModeCheckBox_2.sizePolicy().hasHeightForWidth())
-        self.darkModeCheckBox_2.setSizePolicy(sizePolicy)
-        self.darkModeCheckBox_2.setMinimumSize(QtCore.QSize(130, 30))
-        self.darkModeCheckBox_2.setMaximumSize(QtCore.QSize(130, 30))
-        self.darkModeCheckBox_2.setObjectName("darkModeCheckBox_2")
-        self.darkModeCheckBox_2.setAutoExclusive(True)
-        self.horizontalLayout_11.addWidget(self.darkModeCheckBox_2)
+        sizePolicy.setHeightForWidth(self.darkModeCheckBox.sizePolicy().hasHeightForWidth())
+        self.darkModeCheckBox.setSizePolicy(sizePolicy)
+        self.darkModeCheckBox.setMinimumSize(QtCore.QSize(130, 30))
+        self.darkModeCheckBox.setMaximumSize(QtCore.QSize(130, 30))
+        self.darkModeCheckBox.setObjectName("darkModeCheckBox")
+        self.darkModeCheckBox.setAutoExclusive(True)
+        self.horizontalLayout_11.addWidget(self.darkModeCheckBox)
         self.verticalLayout_3.addWidget(self.themeSettingFrame)
-        
+    
         spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem7)
 
@@ -879,22 +931,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.runButton = QtWidgets.QPushButton(self.frame)
         self.runButton.setObjectName("runButton")
         self.runButton.setFixedSize(200, 200)
-        self.runButton.setStyleSheet(
-
-            "#runButton{\n"
-            "background: #2d2d2d;\n"
-            "border-radius:100px;\n"
-            "color: white;\n"
-            "font-size:25px;\n"
-            "}\n"
-            "\n"
-
-            "#runButton:hover {\n"
-            "background: #393939;\n"
-            "}\n"
-            "\n"
-
-        )
+        self.runButton.setText("START")
         layout = QtWidgets.QHBoxLayout()
         layout.addWidget(self.runButton)
         self.frame.setLayout(layout)
@@ -913,11 +950,11 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.profileBtn.clicked.connect(self.openProfilePage)
         self.cameraBtn.clicked.connect(self.openCameraPage)
         self.clearChat.clicked.connect(self.clearPlainTextEdit)
-        self.inputChat.clicked.connect(self.inputChatFun)
+        self.lightModeCheckBox.setCheckable(True)
+        self.darkModeCheckBox.setCheckable(True)
 
         self.stackedWidget.setCurrentIndex(0)
         self.aiResponse.setPlaceholderText("AI Response:")
-        self.userInput.setPlaceholderText("User Input:\n\nWrite Here")
 
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
@@ -943,12 +980,11 @@ class Ui_MainWindow(QMainWindow, QObject):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.clearChat.setText(_translate("MainWindow", "CLEAR CHAT"))
-        self.inputChat.setText(_translate("MainWindow", "SEND CHAT"))
         self.openAiKeyLabel.setText(_translate("MainWindow", "OpenAi API Key"))
         self.selectVoiceLabel.setText(_translate("MainWindow", "Select Voice"))
         self.label.setText(_translate("MainWindow", "Set Theme"))
         self.lightModeCheckBox.setText(_translate("MainWindow", "Light Mode"))
-        self.darkModeCheckBox_2.setText(_translate("MainWindow", "Dark Mode"))
+        self.darkModeCheckBox.setText(_translate("MainWindow", "Dark Mode"))
         self.saveSettingsButton.setText(_translate("MainWindow", "SAVE"))
         self.cancelSettingsButton.setText(_translate("MainWindow", "CANCEL"))
         self.selectProfileLabel.setText(_translate("MainWindow", "Select Profile"))
@@ -991,9 +1027,6 @@ class Ui_MainWindow(QMainWindow, QObject):
             if self.camera.state() == QtMultimedia.QCamera.ActiveState:
                 self.camera.stop()
 
-    def inputChatFun(self):
-        values = self.userInput.toPlainText()
-        print(values)
 
     def setGreen(self):
         self.shadow_effect.setColor(QColor(15, 255, 90, 255))
@@ -1006,6 +1039,7 @@ class Ui_MainWindow(QMainWindow, QObject):
     def runButtonFun(self):
         self.aiResponse.clear()
         if self.runButton.isChecked():
+            self.runButton.setText("STOP")
             self.shadow_effect.setColor(QColor(55, 176, 255, 255))
             self.runButton.setGraphicsEffect(self.shadow_effect)
             self.timer.setSingleShot(True)
@@ -1016,6 +1050,7 @@ class Ui_MainWindow(QMainWindow, QObject):
             print("starting ai")
 
         else:
+            self.runButton.setText("START")
             self.shadow_effect.setColor(QColor(255, 55, 132, 255))
             self.runButton.setGraphicsEffect(self.shadow_effect)
             self.timer.setSingleShot(True)
@@ -1054,19 +1089,20 @@ class Ui_MainWindow(QMainWindow, QObject):
 #confirmation dailog box function
 def confirmSave():
       #message box to ask if setting want to save
-        reply = QMessageBox.question(ui,"SAVE",
-        "To save the current settings restart is required.Do you want to restart now!"
-        ,QMessageBox.Yes|QMessageBox.No,QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            if ui.stackedWidget.currentIndex() == 1:
-                local_api_key = ui.openAiKeyLineEdit.text()
-                selected_voice_str = ui.selectVoiceComboBox.currentText()
-                # checkApiKey()
-                update_load_file(entered_api_key=local_api_key,selected_voice=selected_voice_str)
-            elif ui.stackedWidget.currentIndex() == 3:
-                selected_profile_gui = ui.selectProfileComboBox.currentText()
-                update_load_file(selected_profile=selected_profile_gui)
-
+    reply = QMessageBox.question(ui,"SAVE",
+    "To save the current settings restart is required.Do you want to restart now!"
+    ,QMessageBox.Yes|QMessageBox.No,QMessageBox.No)
+    if reply == QMessageBox.Yes:
+        if ui.stackedWidget.currentIndex() == 1:
+            local_api_key = ui.openAiKeyLineEdit.text()
+            selected_voice_str = ui.selectVoiceComboBox.currentText()
+            # checkApiKey()
+            update_load_file(entered_api_key=local_api_key,selected_voice=selected_voice_str)
+        elif ui.stackedWidget.currentIndex() == 3:
+            selected_profile_gui = ui.selectProfileComboBox.currentText()
+            update_load_file(selected_profile=selected_profile_gui)
+    sleep(1)
+    os.execl(sys.executable,sys.executable,*sys.argv)
             
 #function that checks the api key if its legit or not
 def checkApiKey():
@@ -1084,10 +1120,12 @@ def getEnteredProfile():
     # profiles_entered.append(ui.addProfileLineEdit.text()) # trying to add profiles in run time 
     entered_profile = ui.addProfileLineEdit.text()
     update_load_file(added_profile=entered_profile)
+    # sleep(1)
+    # os.execl(sys.executable,sys.executable,*sys.argv)
 
 
 #function that sets the field in settings json file
-def update_load_file(selected_voice=None, selected_profile=None, added_profile=None, entered_api_key=None):
+def update_load_file(selected_voice=None, selected_profile=None, added_profile=None, entered_api_key=None,theme=None):
         with open(cd+'\\data\\loadOnStartup.json','r') as file:
             loadOnStartup = json.load(file)
             
@@ -1097,6 +1135,8 @@ def update_load_file(selected_voice=None, selected_profile=None, added_profile=N
         elif (not selected_voice is None) and (not current_voice == selected_voice):
             loadOnStartup['settings'][0]['current_voice'] = selected_voice
         
+        elif theme is not None and theme != '' :
+            loadOnStartup['settings'][0]['theme'] = theme
         elif (not selected_profile is None) and (not current_profile == selected_profile):
             loadOnStartup['profile'][0]['current_profile'] = selected_profile
         
@@ -1107,12 +1147,29 @@ def update_load_file(selected_voice=None, selected_profile=None, added_profile=N
 
         with open(cd+"\\data\\loadOnStartup.json","w") as file:
             json.dump(loadOnStartup,file,indent=4)
-        sleep(1)
-        os.execl(sys.executable,sys.executable,*sys.argv)
 
 
 
+def themeSet():
 
+    if ui.lightModeCheckBox.isChecked():
+        # app.setStyleSheet(stream)
+        update_load_file(theme="light_mode")
+        reloadTheme()
+    elif ui.darkModeCheckBox.isChecked():
+        update_load_file(theme='dark_mode')
+        reloadTheme()
+
+def reloadTheme():
+    with open(cd+"\\data\\loadOnStartup.json",'r') as file:
+        reloadedSettings = json.load(file)
+    current_theme = reloadedSettings['settings'][0]['theme']
+    
+    if current_theme == 'dark_mode':
+        app.setStyleSheet(darkModeStyleSheet)
+    
+    elif current_theme == 'light_mode':
+        app.setStyleSheet(lightModeStyleSheet)
 
 if __name__ == "__main__":
 
@@ -1121,15 +1178,21 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
-
     #connection to get the added profile using button
     ui.addProfile.clicked.connect(getEnteredProfile)
 
     #connection to get the get the api_key and selected voice  and save it 
     ui.saveSettingsButton.clicked.connect(confirmSave)
     ui.saveProfileButton.clicked.connect(confirmSave)
+    ui.lightModeCheckBox.clicked.connect(themeSet)
+    ui.darkModeCheckBox.clicked.connect(themeSet)
     
+    if current_theme == 'light_mode':
+        app.setStyleSheet(lightModeStyleSheet)
+        ui.lightModeCheckBox.setChecked(True)
+    elif current_theme == 'dark_mode':
+        app.setStyleSheet(darkModeStyleSheet)
+        ui.darkModeCheckBox.setChecked(True)
 
-    app.setStyleSheet(stream)
     MainWindow.show()
     sys.exit(app.exec_())
