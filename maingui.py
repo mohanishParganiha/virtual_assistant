@@ -59,10 +59,10 @@ else:
     openai.api_key = "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"
 
 
-with open(cd+"\\darkModeStyleSheet.txt","r") as file:
+with open(cd+"\\data\\darkModeStyleSheet.txt","r") as file:
         darkModeStyleSheet = file.read()
 
-with open(cd+"\\lightModeStyleSheet.txt","r") as file:
+with open(cd+"\\data\\lightModeStyleSheet.txt","r") as file:
         lightModeStyleSheet = file.read()
 
 
