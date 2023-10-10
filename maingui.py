@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'untitled.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -9,24 +8,24 @@
 
 
 from time import sleep
-from PyQt5 import QtCore, QtGui, QtMultimedia, QtMultimediaWidgets, QtWidgets
-from PyQt5.QtCore import QObject, QTimer, pyqtSignal, QCoreApplication, QThread, pyqtSlot
+import typing
+from PyQt5 import QtCore, QtGui, QtWidgets,QtSvg,QtTest
+from PyQt5.QtCore import QObject, QTimer, pyqtSignal, QCoreApplication, QThread,QEventLoop
 from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QMainWindow,QGraphicsDropShadowEffect,QProgressDialog,QLabel,QVBoxLayout,QMessageBox
+from PyQt5.QtWidgets import  QMainWindow,QGraphicsDropShadowEffect,QProgressDialog,QLabel,QMessageBox, QWidget
 import datetime
-from urllib.parse import quote
 import openai
 import pyttsx3
 import speech_recognition as sr
 from intentRecognitionAi import mainTaskExecutor
-import pyowm
 import os
 import sys
 import json 
+from secondWindow import Ui_MiniWindow
+from  progressdialog import Ui_SplashWindow
 
 engine = pyttsx3.init()
 cd = os.path.dirname(os.path.abspath(sys.argv[0]))
-print(cd)
 #add the list of voices availabe in the system
 def updateVoices():
     ls = []
@@ -71,12 +70,16 @@ with open(cd+"\\lightModeStyleSheet.txt","r") as file:
 class worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(str)
+    listening = pyqtSignal(bool)
+    speaking = pyqtSignal(bool)
     thread_running = True
 
     def __init__(self):
         super().__init__()
         self.is_running = True
         self.ai = vA()
+        self.ai.listening.connect(self.emitListening)
+        self.ai.speaking.connect(self.emitSpeaking)
 
 
     def run(self):
@@ -84,10 +87,13 @@ class worker(QObject):
 
             while self.is_running:
 
-                self.wakeup, query = self.ai.wakeUp()
+                query = self.ai.listen()
+                valueReturned = mainTaskExecutor(query)
+                # self.wakeup, query = self.ai.wakeUp()
                 counter=0
-
-                if self.wakeup:
+                if  'none' in query or valueReturned is None:
+                    pass
+                elif "wakeup" in valueReturned:
 
                     self.progress.emit(f'You: {query}\n\nSam: Hello sir how may I help you\n\n')
                     self.ai.speak("Hello sir how may I help you")
@@ -103,6 +109,12 @@ class worker(QObject):
 
                             if valueReturned is True:
                                 pass
+                            
+                            elif valueReturned is None:
+                                pass
+
+                            elif "self_introduction" in valueReturned:
+                                self.ai.speak('Hello I am sam ,  a virtual assistant made to assist you,  I can set alarms for you,    play specified songs,    open websites,    surf the web,    open social websites,    take notes,    and more as my functionality is increased with each updates.')
 
                             elif "goodbye" in query:
                                 self.progress.emit("Sam: Have a good day sir\n\n")
@@ -120,7 +132,7 @@ class worker(QObject):
                             
                             elif 'current_weather' in valueReturned:
                                 valueReturned.remove('current_weather')
-                                # print(valueReturned)
+                                self.ai.speak(valueReturned)
 
                             elif 'tomorrows_weather' in valueReturned:
                                 valueReturned.remove('tomorrows_weather')
@@ -132,27 +144,27 @@ class worker(QObject):
                                 while True:
                                     if  match in ['rain tomorrow','raining tomorrow','rainy tomorrow']:
                                         if valueReturned[2]:
-                                            self.ai.speak(f'yes it will be {match}')
+                                            self.ai.speak(f'the weather seems to be raining tommorow')
                                         else:
-                                            self.ai.speak(f'no it will not be {match}')
+                                            self.ai.speak(f'the weather does not seems to be raining tomorrow')
                                         break
                                     elif match in ['sunny tomorrow','clear tomorrow']:
                                         if valueReturned[0]:
-                                            self.ai.speak(f'yes it will be {match}')
+                                            self.ai.speak(f'yes the weather seems to be clear tomorrow')
                                         else:
-                                            self.ai.speak(f'no it will not be {match}')
+                                            self.ai.speak(f'the weather does not seems to be clear tomorrow')
                                         break
                                     elif match in ['cloudy tomorrow','partialy cloudy tomorrow']:
                                         if valueReturned[1]:
-                                            self.ai.speak(f'yes it will be {match}')
+                                            self.ai.speak(f'the weather seems to be cloudy tomorrow')
                                         else:
-                                            self.ai.speak(f'no it will not be {match}')
+                                            self.ai.speak(f'the weather does not seems to be cloudy tomorrow')
                                         break
                                     elif match in ['stormy tomorrow']:
                                         if valueReturned[3]:
-                                            self.ai.speak(f'yes it will be {match}')
+                                            self.ai.speak(f'the weather seems to be stormy tomorrow')
                                         else:
-                                            self.ai.speak(f'no it will not be {match}')
+                                            self.ai.speak(f'the weather does not seems to be storym tomorrow')
                                         break
                                     elif match in ['tomorrows weather',"tomorrow's weather"]:
                                         data = valueReturned[4]
@@ -162,7 +174,7 @@ class worker(QObject):
                                         break
                             elif 'forecast_weather' in valueReturned:
                                 valueReturned.remove('forecast_weather')
-                                # print(valueReturned)
+                                print(valueReturned)
 
                             # elif "list" in valueReturned:
                             #     count = 0
@@ -194,6 +206,10 @@ class worker(QObject):
     def stopWorker(self):
         self.thread_running = False
 
+    def emitListening(self,value):
+        self.listening.emit(value)
+    def emitSpeaking(self,value):
+        self.speaking.emit(value)
 
 class ActivateThread(QThread, QObject):
     stopWork = pyqtSignal()
@@ -215,10 +231,12 @@ class ActivateThread(QThread, QObject):
         self.worker.stop()
     def stopworkerFun(self):
         self.worker.stopWorker()
-class vA():
+class vA(QObject):
     query = 'none'
-
+    listening = pyqtSignal(bool)
+    speaking = pyqtSignal(bool)
     def __init__(self):
+        super().__init__()
         # Initialize the recognizer
         self.recognizer = sr.Recognizer()
         # Initialize the text-to-speech engine
@@ -230,11 +248,14 @@ class vA():
         self.engine.setProperty('rate',153)
 
     def speak(self, text):
+        self.speaking.emit(True)
         self.engine.say(text)
         self.engine.runAndWait()
+        self.speaking.emit(False)
 
 
     def listen(self, time=0, ptimeLimit=8):
+        self.listening.emit(True)
         with sr.Microphone() as source:
             print("Listening...")
             audio = self.recognizer.listen(source, timeout=time, phrase_time_limit=ptimeLimit)
@@ -247,6 +268,7 @@ class vA():
             except Exception as e:
                 self.query = 'none'
 
+        self.listening.emit(False)
         return self.query.lower()
 
     def wakeUp(self):
@@ -293,9 +315,6 @@ class vA():
         fileLog.close()
         return ans
     
-
-
-
 
 class Ui_MainWindow(QMainWindow, QObject):
 
@@ -358,12 +377,12 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.mainMnuBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.mainMnuBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.mainMnuBtn.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(
-            QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg"),
-            QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg")
+        # icon.addPixmap(
+        #     QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg"),
+        #     QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.mainMnuBtn.setIcon(icon)
-        self.mainMnuBtn.setIconSize(QtCore.QSize(50, 50))
+        self.mainMnuBtn.setIconSize(QtCore.QSize(40, 40))
         self.mainMnuBtn.setCheckable(True)
         self.mainMnuBtn.setAutoExclusive(True)
         self.mainMnuBtn.setFlat(False)
@@ -374,27 +393,27 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.verticalLayout_8.addWidget(self.mainMnuBtn, 0, QtCore.Qt.AlignHCenter)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         self.verticalLayout_8.addItem(spacerItem)
-        self.cameraBtn = QtWidgets.QPushButton(self.groupBox)
+        self.secondWindowBtn = QtWidgets.QPushButton(self.groupBox)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cameraBtn.sizePolicy().hasHeightForWidth())
-        self.cameraBtn.setSizePolicy(sizePolicy)
-        self.cameraBtn.setMinimumSize(QtCore.QSize(50, 50))
-        self.cameraBtn.setMaximumSize(QtCore.QSize(50, 50))
-        self.cameraBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self.cameraBtn.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/devices/22/camera-photo.svg"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.cameraBtn.setIcon(icon1)
-        self.cameraBtn.setIconSize(QtCore.QSize(50, 50))
-        self.cameraBtn.setCheckable(True)
-        self.cameraBtn.setAutoExclusive(True)
-        self.cameraBtn.setFlat(False)
-        self.cameraBtn.setObjectName("cameraBtn")
-        self.buttonGroup.addButton(self.cameraBtn)
-        self.verticalLayout_8.addWidget(self.cameraBtn, 0, QtCore.Qt.AlignHCenter)
+        sizePolicy.setHeightForWidth(self.secondWindowBtn.sizePolicy().hasHeightForWidth())
+        self.secondWindowBtn.setSizePolicy(sizePolicy)
+        self.secondWindowBtn.setMinimumSize(QtCore.QSize(50, 50))
+        self.secondWindowBtn.setMaximumSize(QtCore.QSize(50, 50))
+        self.secondWindowBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
+        self.secondWindowBtn.setText("")
+        icon1 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg")
+        # icon1.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.secondWindowBtn.setIcon(icon1)
+        self.secondWindowBtn.setIconSize(QtCore.QSize(40, 40))
+        self.secondWindowBtn.setCheckable(True)
+        self.secondWindowBtn.setAutoExclusive(True)
+        self.secondWindowBtn.setFlat(False)
+        self.secondWindowBtn.setObjectName("secondWindowBtn")
+        self.buttonGroup.addButton(self.secondWindowBtn)
+        self.verticalLayout_8.addWidget(self.secondWindowBtn, 0, QtCore.Qt.AlignHCenter)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
         self.verticalLayout_8.addItem(spacerItem1)
         self.settingBtn = QtWidgets.QPushButton(self.groupBox)
@@ -408,11 +427,11 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.settingBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.settingBtn.setStyleSheet("")
         self.settingBtn.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg")
+        # icon2.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settingBtn.setIcon(icon2)
-        self.settingBtn.setIconSize(QtCore.QSize(50, 50))
+        self.settingBtn.setIconSize(QtCore.QSize(40, 40))
         self.settingBtn.setCheckable(True)
         self.settingBtn.setAutoExclusive(True)
         self.settingBtn.setAutoDefault(False)
@@ -433,11 +452,11 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.profileBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.profileBtn.setFocusPolicy(QtCore.Qt.NoFocus)
         self.profileBtn.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg")
+        # icon3.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.profileBtn.setIcon(icon3)
-        self.profileBtn.setIconSize(QtCore.QSize(50, 50))
+        self.profileBtn.setIconSize(QtCore.QSize(40, 40))
         self.profileBtn.setCheckable(True)
         self.profileBtn.setAutoExclusive(True)
         self.profileBtn.setFlat(False)
@@ -455,12 +474,12 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.pushButton_3.setSizePolicy(sizePolicy)
         self.pushButton_3.setMinimumSize(QtCore.QSize(50, 50))
         self.pushButton_3.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(
-            cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg")
+        # icon4.addPixmap(QtGui.QPixmap(
+        #     cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon4)
-        self.pushButton_3.setIconSize(QtCore.QSize(50, 50))
+        self.pushButton_3.setIconSize(QtCore.QSize(40, 40))
         self.pushButton_3.setCheckable(True)
         self.pushButton_3.setAutoExclusive(True)
         self.pushButton_3.setFlat(True)
@@ -537,6 +556,33 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.clearChat.setFlat(True)
         self.clearChat.setObjectName("clearChat")
         self.horizontalLayout_4.addWidget(self.clearChat)
+        
+        self.micInputShow = QtSvg.QSvgWidget(parent=self.widget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.micInputShow.sizePolicy().hasHeightForWidth())
+        self.micInputShow.setSizePolicy(sizePolicy)
+        self.micInputShow.setMinimumSize(QtCore.QSize(30, 30))
+        self.micInputShow.setMaximumSize(QtCore.QSize(30, 30))
+        self.micInputShow.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+
+        self.speakOutShow = QtSvg.QSvgWidget(parent=self.widget_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.speakOutShow.sizePolicy().hasHeightForWidth())
+        self.speakOutShow.setSizePolicy(sizePolicy)
+        self.speakOutShow.setMinimumSize(QtCore.QSize(30, 30))
+        self.speakOutShow.setMaximumSize(QtCore.QSize(30, 30))
+        self.speakOutShow.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+
+    
+        self.horizontalLayout_4.addWidget(self.micInputShow)
+        self.horizontalLayout_4.addWidget(self.speakOutShow)
+
         self.verticalLayout_9.addWidget(self.widget_2)
         self.frame_3 = QtWidgets.QFrame(self.widget)
         self.frame_3.setEnabled(True)
@@ -743,14 +789,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.verticalLayout_3.addWidget(self.footerSettingsPage)
         self.verticalLayout_6.addWidget(self.frame_5)
         self.stackedWidget.addWidget(self.settingspage)
-        self.page = QtWidgets.QWidget()
-        self.page.setObjectName("page")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.page)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.face_recog_widget = QtWidgets.QWidget(self.page)
-        self.face_recog_widget.setObjectName("face_recog_widget")
-        self.horizontalLayout_2.addWidget(self.face_recog_widget)
-        self.stackedWidget.addWidget(self.page)
+
         self.profilepage = QtWidgets.QWidget()
         self.profilepage.setObjectName("profilepage")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.profilepage)
@@ -908,25 +947,6 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.actionHelp = QtWidgets.QAction(MainWindow)
         self.actionHelp.setObjectName("actionHelp")
 
-        self.availabelCameras = QtMultimedia.QCameraInfo.availableCameras()
-        self.verticalLayoutFaceRecogWidget = QVBoxLayout(self.face_recog_widget)
-        if not self.availabelCameras:
-            noCameraLabel = QLabel()
-            noCameraLabel.setParent(self.face_recog_widget)
-            noCameraLabel.setText('no cameras found')
-            noCameraLabel.setAlignment(QtCore.Qt.AlignCenter)
-
-        if self.availabelCameras:
-            # creating a QCameraViewFinder object
-            self.viewfinder = QtMultimediaWidgets.QCameraViewfinder()
-            # setting it to face_recog_widget
-            self.viewfinder.setParent(self.face_recog_widget)
-            # showing this viewfinder
-            self.viewfinder.show()
-            # Set the camera.
-            self.camera = QtMultimedia.QCamera(self.availabelCameras[0])
-            self.camera.setViewfinder(self.viewfinder)
-            self.camera.setCaptureMode(QtMultimedia.QCamera.CaptureViewfinder)
 
         self.runButton = QtWidgets.QPushButton(self.frame)
         self.runButton.setObjectName("runButton")
@@ -948,7 +968,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.mainMnuBtn.clicked.connect(self.openHomePage)
         self.settingBtn.clicked.connect(self.openSettingPage)
         self.profileBtn.clicked.connect(self.openProfilePage)
-        self.cameraBtn.clicked.connect(self.openCameraPage)
+        self.secondWindowBtn.clicked.connect(self.openSecondWindow)
         self.clearChat.clicked.connect(self.clearPlainTextEdit)
         self.lightModeCheckBox.setCheckable(True)
         self.darkModeCheckBox.setCheckable(True)
@@ -970,10 +990,10 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.pushButton_3.clicked['bool'].connect(self.stoping_thread)
         self.thread.worker.progress.connect(self.reportProgressGui)
         self.thread.worker.finished.connect(self.clearPlainTextEdit)
-
+        self.thread.worker.speaking.connect(self.showSpeaking)
+        self.thread.worker.listening.connect(self.showListening)
         self.selected_voice_str  = 0
-       
-        
+
    
 
     def retranslateUi(self, MainWindow):
@@ -996,37 +1016,61 @@ class Ui_MainWindow(QMainWindow, QObject):
 
 
        
+    def showSpeaking(self,isSpeaking:bool):
+        if isSpeaking:
+            self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-on.svg")
+        else:
+            self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+
+    def showListening(self,isListening:bool):
+        if isListening:
+            self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-ready.svg")
+        else:
+            self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+
+
+    def generateSplash(self,text):
+        self.splashwindow = QtWidgets.QMainWindow()
+        self.splash = Ui_SplashWindow()
+        self.splash.setupUi(self.splashwindow)
+        self.splash.label.setStyleSheet(
+            'font-family:"Courier New";\n'
+            'font-size:42px;'
+            )
+        self.splash.label.setText(text)
+        self.splashwindow.show()
+        self.splash.animateClosing()
+        self.splash.animation.finished.connect(self.closeWindow)
     
+    def closeWindow(self):
+        self.splashwindow.close()
+        MainWindow.close()
+
 
     def stoping_thread(self):
         self.thread.stopWorker.emit()
-        self.start_progress()
-        self.timer.singleShot(100,MainWindow.close)
+        self.generateSplash(text="Closing please wait a moment")
 
     def openHomePage(self):
         if self.mainMnuBtn.isChecked():
             self.stackedWidget.setCurrentIndex(0)
-            if self.camera.state() == QtMultimedia.QCamera.ActiveState:
-                self.camera.stop()
+    
 
     def openSettingPage(self):
         if self.settingBtn.isChecked():
             self.stackedWidget.setCurrentIndex(1)
-            if self.camera.state() == QtMultimedia.QCamera.ActiveState:
-                self.camera.stop()
 
-    def openCameraPage(self):
-        if self.cameraBtn.isChecked():
-            self.stackedWidget.setCurrentIndex(2)
-            # start the camera
-            self.camera.start()
+    def openSecondWindow(self):
+        self.miniWindow = QtWidgets.QMainWindow()
+        self.ui = Ui_MiniWindow()
+        self.ui.setupUi(self.miniWindow,MainWindow)
+        self.miniWindow.show()
+        MainWindow.hide()
 
     def openProfilePage(self):
         if self.profileBtn.isChecked():
-            self.stackedWidget.setCurrentIndex(3)
-            if self.camera.state() == QtMultimedia.QCamera.ActiveState:
-                self.camera.stop()
-
+            self.stackedWidget.setCurrentIndex(2)
+  
 
     def setGreen(self):
         self.shadow_effect.setColor(QColor(15, 255, 90, 255))
@@ -1064,26 +1108,14 @@ class Ui_MainWindow(QMainWindow, QObject):
     # progress function
     def reportProgressGui(self, value):
         self.aiResponse.insertPlainText(str(value))
+
     #function to clean the ai response text area
     def clearPlainTextEdit(self):
         self.aiResponse.clear()
-    #function for progress bar when closing the app
-    def start_progress(self):
-        self.progress_dialog = QProgressDialog(labelText="CLOSING WAIT FEW SEC", minimum=0, maximum=100, parent=self)
-        self.progress_dialog.setWindowTitle("")
-        self.progress_dialog.setWindowModality(2)
-        self.progress_value = 100
-        self.progress_dialog.show()
-        for value in range(100):
-            # self.timer.start(200)
-            sleep(0.2)
-            self.progress_dialog.setValue(100 - value)
-        self.progress_dialog.hide()
-        self.progress_dialog.setDisabled(True)
-
+    
     # cleanup
     # def cleanup(self):
-    #     if hasattr(self, 'thread')
+        # if hasattr(self, 'thread'):
 
 
 #confirmation dailog box function

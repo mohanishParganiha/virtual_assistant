@@ -1,6 +1,21 @@
 {	
 	"intents":[
         {
+            "tag":"hello",
+            "patterns":["hello sam","hay sam","hi sam"],
+            "responses":["wakeup"]
+        },
+        {
+            "tag":"self_introduction",
+            "patterns":["tell me about you","who are you","who is sam"],
+            "responses":["self_introduction"]
+        },
+        {
+            "tag":"self_features",
+            "patterns":["what can you do","tell me what can you do","what task's can you perfrom"],
+            "responses":["self_introduction"]
+        },
+        {
             "tag":"open",
             "patterns":["open","launch","start","visit","search"
             ],
@@ -46,14 +61,13 @@
             "responses":["tomorrows_weather"]
         },
         {
-            "tag":"forcast_weather",
-            "patterns":["mondays weather","tuesdays weather","wednesdays weather",
-            "fridays weather","thursdays weather","fridays weather",
-            "saturdays weather","sundays weather","monday's weather","tuesday's weather","wednesday's weather",
+            "tag":"forecast_weather",
+            "patterns":["monday's weather","tuesday's weather","wednesday's weather",
             "friday's weather","thursday's weather","friday's weather",
-            "saturday's weather","sunday's weather"
+            "saturday's weather","sunday's weather","tell me monday's weather","tell me tuesday's weather","tell me wednesday's weather"
+            ,"tell me thursday's weather","tell me fridays's weather","tell me sundays's weather"
             ],
-            "responses":["forcast_weather"]
+            "responses":["forecast_weather"]
         }
     	]
 }

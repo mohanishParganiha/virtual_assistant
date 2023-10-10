@@ -56,21 +56,27 @@ background:#B9D7EA;
 }
 
 
-#mainMnuBtn,#settingBtn,#profileBtn,#cameraBtn{
+#mainMnuBtn,#settingBtn,#profileBtn,#secondWindowBtn{
 
 background:#B9D7EA;
 
-border:none;
+border-style:none;
 
 }
 
 
-#mainMnuBtn:pressed,#settingBtn:pressed#profileBtn:pressed,#cameraBtn:pressed{
+#mainMnuBtn:pressed,#settingBtn:pressed#profileBtn:pressed,#secondWindowBtn:pressed{
 
 background:#B9D7EA;
 
-border:none;
+border-style:none;
 
+}
+
+#pushButton_3{
+background:#B9D7EA;
+border-style:none;
+border-radius:10px;
 }
 
 

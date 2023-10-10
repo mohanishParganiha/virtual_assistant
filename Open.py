@@ -8,6 +8,9 @@ import pyowm
 from pyowm.utils import timestamps
 from datetime import datetime
 
+
+location = "Banbarad,India"
+
 open_weather_api_key='14db83cc45d773c50212aa030e74fc1a'
 owm = pyowm.OWM(open_weather_api_key)
 current_weather = owm.weather_manager()
@@ -38,22 +41,22 @@ def openExe(query):
     
     
     elif "email" in query:
-         return ['email']
+        return ['email']
     
 
     elif "whatsapp" in query:
         return ['whatsapp']
     
     elif "current_weather" in query:
-        Weather = current_weather.weather_at_place('Banbarad,India')
+        Weather = current_weather.weather_at_place(location)
         Weather = Weather.weather
         detailed_status = Weather.detailed_status
         temp = Weather.temperature('celsius')['feels_like']
         humidity = Weather.humidity
-        return ['current_weather',detailed_status,temp,humidity]
+        return ['current_weather',"current weather at",location,detailed_status,temp,humidity]
 
     elif "tomorrows_weather" in query:
-        forcast = current_weather.forecast_at_place('Banbarad,India','3h')
+        forcast = current_weather.forecast_at_place(location,'3h')
         will_rain = forcast.will_be_rainy_at(tomorrow)
         will_sunny = forcast.will_be_clear_at(tomorrow)
         will_cloudy = forcast.will_be_cloudy_at(tomorrow)
@@ -86,7 +89,7 @@ def openExe(query):
         return ['tomorrows_weather',will_sunny,will_cloudy,will_rain,will_stormy,data_dict]
     
     elif "forecast_weather" in query:
-        forcast = current_weather.forecast_at_place('Banbarad,India','3h')
+        forecast = current_weather.forecast_at_place(location,'3h')
         query = query.replace("forecast_weather ",'')
         weeks = {'monday':0,'tuesday':1,'wednesday':2,'thursday':3,'friday':4,'saturday':5,'sunday':6}
         for keys in weeks.keys():
@@ -111,7 +114,7 @@ def openExe(query):
         if given_day in left_days:
             new_date = datetime(current_date.year,current_date.month,current_date.day+given_day+1)
             new_date = new_date.date()
-            for weather in forcast.forcast:
+            for weather in forecast.forecast:
                 if str(new_date) in weather.reference_time('iso'):
                     forecast_weather.append(
                     'reference_time:'+weather.reference_time('iso')+

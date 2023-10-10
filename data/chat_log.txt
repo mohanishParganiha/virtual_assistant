@@ -18,3 +18,20 @@ Sam: Certainly,here is the list \n
         5.all purpose flour
         6.butter
 
+
+You: <__main__.vA object at 0x000001C7D82F1790>
+Sam: I can't do anything with this object.
+You: <__main__.vA object at 0x000001C7D82F1790>
+Sam: There isn't much you can do with this object. It is a reference to a specific memory address in your computer's memory.
+You: <__main__.vA object at 0x00000227A558A350>
+Sam: There isn't much you can do with this object. It is an instance of a class, so you could use it to access methods and properties associated with that class.
+You: <__main__.vA object at 0x000001CEBC2E2EF0>
+Sam: Sorry, I don't understand what you mean. Could you please rephrase your question?
+You: <__main__.vA object at 0x000001CEBC2E2EF0>
+Sam: Sorry, I don't understand what you mean. Could you please rephrase your question?
+You: <__main__.vA object at 0x000001CEBC2E2EF0>
+Sam: This is not a valid response. Please provide a valid response.
+You: <__main__.vA object at 0x000001E15B30AE60>
+Sam: Unfortunately, I cannot answer that question. To get an accurate forecast for Monday's weather, you will need to check a reliable weather source such as the National Weather Service or your local news station.
+You: <__main__.vA object at 0x000001E5C98D2EF0>
+Sam: Sorry, I don't understand what you are asking. Could you please rephrase your question?

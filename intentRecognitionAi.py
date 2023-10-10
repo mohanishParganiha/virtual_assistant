@@ -147,6 +147,7 @@ def TrainTasks():
     print("             ")
 
 # TrainTasks()
+
 def TasksExecutor(query):
 
     class NeuralNet(nn.Module):
@@ -233,8 +234,15 @@ def TasksExecutor(query):
 def mainTaskExecutor(query):
     taskNew = str(query).lower()
     ReturnedData = str(TasksExecutor(taskNew))
-
-    if "open" in ReturnedData:
+    if ReturnedData is None:
+        return None
+    elif  "wakeup" in ReturnedData:
+        return "wakeup"
+    
+    elif "self_introduction" in ReturnedData:
+        return "self_introduction"
+        
+    elif "open" in ReturnedData:
         value = openExe(taskNew,)
         return value
     
@@ -257,8 +265,9 @@ def mainTaskExecutor(query):
         value = openExe(ReturnedData)
         return value
     
-    elif "forcast_weather" in ReturnedData:
+    elif "forecast_weather" in ReturnedData:
         task = ReturnedData +" "+taskNew
         value = openExe(task)
-        
         return value
+    else:
+        return taskNew
