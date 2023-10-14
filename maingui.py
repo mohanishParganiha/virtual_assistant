@@ -456,9 +456,9 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.mainMnuBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.mainMnuBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.mainMnuBtn.setText("")
-        icon = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/apps/24/homerun.svg")
+        icon = QtGui.QIcon("./resource/icons/homerun.svg")
         # icon.addPixmap(
-        #     QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg"),
+        #     QtGui.QPixmap(cd+"/resource/icons/homerun.svg"),
         #     QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.mainMnuBtn.setIcon(icon)
         self.mainMnuBtn.setIconSize(QtCore.QSize(40, 40))
@@ -482,8 +482,8 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.secondWindowBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.secondWindowBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.secondWindowBtn.setText("")
-        icon1 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg")
-        # icon1.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg"),
+        icon1 = QtGui.QIcon("./resource/icons/arrow-up-double.svg")
+        # icon1.addPixmap(QtGui.QPixmap(cd+"/resource/icons/arrow-up-double.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.secondWindowBtn.setIcon(icon1)
         self.secondWindowBtn.setIconSize(QtCore.QSize(40, 40))
@@ -506,8 +506,8 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.settingBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.settingBtn.setStyleSheet("")
         self.settingBtn.setText("")
-        icon2 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg")
-        # icon2.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg"),
+        icon2 = QtGui.QIcon("./resource/icons/settings-configure.svg")
+        # icon2.addPixmap(QtGui.QPixmap(cd+"/resource/icons/settings-configure.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settingBtn.setIcon(icon2)
         self.settingBtn.setIconSize(QtCore.QSize(40, 40))
@@ -531,8 +531,8 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.profileBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.profileBtn.setFocusPolicy(QtCore.Qt.NoFocus)
         self.profileBtn.setText("")
-        icon3 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg")
-        # icon3.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg"),
+        icon3 = QtGui.QIcon("./resource/icons/amarok_artist.svg")
+        # icon3.addPixmap(QtGui.QPixmap(cd+"/resource/icons/amarok_artist.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.profileBtn.setIcon(icon3)
         self.profileBtn.setIconSize(QtCore.QSize(40, 40))
@@ -553,9 +553,9 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.pushButton_3.setSizePolicy(sizePolicy)
         self.pushButton_3.setMinimumSize(QtCore.QSize(50, 50))
         self.pushButton_3.setText("")
-        icon4 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/24/window-close.svg")
+        icon4 = QtGui.QIcon("./resource/icons/window-close.svg")
         # icon4.addPixmap(QtGui.QPixmap(
-        #     cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg"),
+        #     cd+"/resource/icons/24/window-close.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon4)
         self.pushButton_3.setIconSize(QtCore.QSize(40, 40))
@@ -645,7 +645,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.micInputShow.setMinimumSize(QtCore.QSize(30, 30))
         self.micInputShow.setMaximumSize(QtCore.QSize(30, 30))
         self.micInputShow.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+        self.micInputShow.load("./resource/icons/mic-off.svg")
 
         self.speakOutShow = QtSvg.QSvgWidget(parent=self.widget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -656,7 +656,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.speakOutShow.setMinimumSize(QtCore.QSize(30, 30))
         self.speakOutShow.setMaximumSize(QtCore.QSize(30, 30))
         self.speakOutShow.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+        self.speakOutShow.load("./resource/icons/audio-off.svg")
 
     
         self.horizontalLayout_4.addWidget(self.micInputShow)
@@ -1098,15 +1098,15 @@ class Ui_MainWindow(QMainWindow, QObject):
        
     def showSpeaking(self,isSpeaking:bool):
         if isSpeaking:
-            self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-on.svg")
+            self.speakOutShow.load("./resource/icons/audio-on.svg")
         else:
-            self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+            self.speakOutShow.load("./resource/icons/audio-off.svg")
 
     def showListening(self,isListening:bool):
         if isListening:
-            self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-ready.svg")
+            self.micInputShow.load("./resource/icons/mic-ready.svg")
         else:
-            self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+            self.micInputShow.load("./resource/icons/mic-off.svg")
 
 
     def generateSplash(self,text):
