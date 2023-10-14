@@ -48,7 +48,7 @@
         },
         {
             "tag":"current_weather",
-            "patterns":["current weather","todays weather","weather now"
+            "patterns":["current weather","todays weather","weather now","what's the current weather","how is the current weather"
             ],
             "responses":["current_weather"]
         },

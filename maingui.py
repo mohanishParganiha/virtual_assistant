@@ -139,8 +139,13 @@ class worker(QObject):
                             
                             elif 'current_weather' in valueReturned:
                                 valueReturned.remove('current_weather')
-                                self.progress.emit("Sam: "+valueReturned+'\n')
                                 self.ai.speak(valueReturned)
+                                valueReturned.insert(0,"Sam: ")
+                                valueReturned.insert(len(valueReturned),"\n")
+                                text = ''
+                                for i in valueReturned:
+                                    text = text + str(i)
+                                self.progress.emit(text)
 
                             elif 'tomorrows_weather' in valueReturned:
                                 valueReturned.remove('tomorrows_weather')
