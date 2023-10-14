@@ -269,5 +269,33 @@ def mainTaskExecutor(query):
         task = ReturnedData +" "+taskNew
         value = openExe(task)
         return value
+    
+    elif "get_news" in ReturnedData:
+        return  "get_news"
+
+    elif "top_headlines" in ReturnedData:
+        return "top_headlines"
+
+    elif "business_news" in ReturnedData:
+        return "business_news"
+    
+    elif "entertainment_news" in ReturnedData:
+        return "entertainment_news"
+    
+    elif "general_news" in ReturnedData:
+        return "general_news"
+    
+    elif "health_news" in ReturnedData:
+        return "health_news"
+    
+    elif "science_news" in ReturnedData:
+        return "science_news"
+    
+    elif "sports_news" in ReturnedData:
+        return "sports_news"
+    
+    elif "technology_news" in ReturnedData:
+        return "technology_news"
+
     else:
         return taskNew

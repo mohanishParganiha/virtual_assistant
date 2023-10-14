@@ -68,6 +68,51 @@
             ,"tell me thursday's weather","tell me fridays's weather","tell me sundays's weather"
             ],
             "responses":["forecast_weather"]
+        },
+        {
+            "tag":"get_news",
+            "patterns":["tell me the latest news","tell me news","what's new today","what's in the news today","what is the news today","what is the latest news","whats in the lates news","what are the lates news","what are the news for today","what are the news","headlines for today"],
+            "responses":["get_news"]
+        },
+        {
+            "tag":"top_headlines",
+            "patterns":["top headlines","give me top headlines","just the top headlines","just give me the top headlines","no give me top headlines","no just give me top headlines"],
+            "responses":["top_headlines"]
+        },
+        {
+            "tag":"business_news",
+            "patterns":["give me business news","give me business headlines","yes business","business news","business headlines"],
+            "responses":["business_news"]
+        },
+        {
+            "tag":"entertainment_news",
+            "patterns":["give me entertainment news","give me entertainment headlines","yes entertainment","entertainment news","entertainment headlines"],
+            "responses":["entertainment_news"]
+        },
+        {
+            "tag":"general_news",
+            "patterns":["give me general news","give me general headlines","yes general","general news","general headlines"],
+            "responses":["general_news"]
+        },
+        {
+            "tag":"health_news",
+            "patterns":["give me health news","give me health headlines","yes health","health news","health headlines"],
+            "responses":["health_news"]
+        },
+        {
+            "tag":"science_news",
+            "patterns":["give me science news","give me science headlines","yes science","science news","science headlines"],
+            "responses":["science_news"]
+        },
+        {
+            "tag":"sports_news",
+            "patterns":["give me sports news","give me sports headlines","yes sports","sports news","sports headlines"],
+            "responses":["sports_news"]
+        },
+        {
+            "tag":"technology_news",
+            "patterns":["give me technology news","give me technology headlines","yes technology","technology news","technology headlines"],
+            "responses":["technology_news"]
         }
     	]
 }

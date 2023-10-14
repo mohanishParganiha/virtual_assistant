@@ -23,6 +23,12 @@ import sys
 import json 
 from secondWindow import Ui_MiniWindow
 from  progressdialog import Ui_SplashWindow
+from newsapi import NewsApiClient
+
+#init newsapi
+newsapi = NewsApiClient(api_key='f871d1b4a83f468a8af0179a474618c2')
+
+
 
 engine = pyttsx3.init()
 cd = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -95,8 +101,9 @@ class worker(QObject):
                     pass
                 elif "wakeup" in valueReturned:
 
-                    self.progress.emit(f'You: {query}\n\nSam: Hello sir how may I help you\n\n')
+                    self.progress.emit(f'You: {query}\nSam: Hello sir how may I help you\n')
                     self.ai.speak("Hello sir how may I help you")
+
 
                     while self.is_running and counter != 3:
 
@@ -104,7 +111,7 @@ class worker(QObject):
 
                         if not 'none' in query:
 
-                            self.progress.emit("You: " + query + "\n\n")
+                            self.progress.emit("You: " + query + "\n")
                             valueReturned = mainTaskExecutor(query)
 
                             if valueReturned is True:
@@ -115,9 +122,9 @@ class worker(QObject):
 
                             elif "self_introduction" in valueReturned:
                                 self.ai.speak('Hello I am sam ,  a virtual assistant made to assist you,  I can set alarms for you,    play specified songs,    open websites,    surf the web,    open social websites,    take notes,    and more as my functionality is increased with each updates.')
-
+                                self.progress.emit('Sam: Hello I am sam ,  a virtual assistant made to assist you,  I can set alarms for you,    play specified songs,    open websites,    surf the web,    open social websites,    take notes,    and more as my functionality is increased with each updates.\n')
                             elif "goodbye" in query:
-                                self.progress.emit("Sam: Have a good day sir\n\n")
+                                self.progress.emit("Sam: Have a good day sir\n")
                                 self.ai.speak("Have a good day sir")
 
 
@@ -132,6 +139,7 @@ class worker(QObject):
                             
                             elif 'current_weather' in valueReturned:
                                 valueReturned.remove('current_weather')
+                                self.progress.emit("Sam: "+valueReturned+'\n')
                                 self.ai.speak(valueReturned)
 
                             elif 'tomorrows_weather' in valueReturned:
@@ -144,38 +152,52 @@ class worker(QObject):
                                 while True:
                                     if  match in ['rain tomorrow','raining tomorrow','rainy tomorrow']:
                                         if valueReturned[2]:
-                                            self.ai.speak(f'the weather seems to be raining tommorow')
+                                            self.progress.emit('Sam: the weather seems to be raining tommorow.\n')
+                                            self.ai.speak('the weather seems to be raining tommorow')
                                         else:
-                                            self.ai.speak(f'the weather does not seems to be raining tomorrow')
+                                            self.progress.emit('Sam: the weather does not seems to be raining tomorrow.\n')
+                                            self.ai.speak('the weather does not seems to be raining tomorrow')
+
                                         break
                                     elif match in ['sunny tomorrow','clear tomorrow']:
                                         if valueReturned[0]:
-                                            self.ai.speak(f'yes the weather seems to be clear tomorrow')
+                                            self.progress.emit('Sam: yes the weather seems to be clear tomorrow.\n')
+                                            self.ai.speak('yes the weather seems to be clear tomorrow')
+
                                         else:
-                                            self.ai.speak(f'the weather does not seems to be clear tomorrow')
+                                            self.progress.emit('Sam: the weather does not seems to be clear tomorrow.\n')
+                                            self.ai.speak('the weather does not seems to be clear tomorrow')
+                                       
                                         break
                                     elif match in ['cloudy tomorrow','partialy cloudy tomorrow']:
                                         if valueReturned[1]:
-                                            self.ai.speak(f'the weather seems to be cloudy tomorrow')
+                                            self.progress.emit('Sam: the weather seems to be cloudy tomorrow.\n')
+                                            self.ai.speak('the weather seems to be cloudy tomorrow')
+
                                         else:
-                                            self.ai.speak(f'the weather does not seems to be cloudy tomorrow')
+                                            self.progress.emit('Sam: the weather does not seems to be cloudy tomorrow.\n')
+                                            self.ai.speak('the weather does not seems to be cloudy tomorrow')
+                                        
                                         break
                                     elif match in ['stormy tomorrow']:
                                         if valueReturned[3]:
-                                            self.ai.speak(f'the weather seems to be stormy tomorrow')
+                                            self.progress.emit('Sam: the weather seems to be stormy tomorrow.\n')
+                                            self.ai.speak('the weather seems to be stormy tomorrow')
+
                                         else:
-                                            self.ai.speak(f'the weather does not seems to be storym tomorrow')
+                                            self.progress.emit('Sam: the weather does not seems to be storym tomorrow.\n')
+                                            self.ai.speak('the weather does not seems to be storym tomorrow')
+
                                         break
                                     elif match in ['tomorrows weather',"tomorrow's weather"]:
-                                        data = valueReturned[4]
-                                        for keys  in data:
-                                            self.ai.speak(keys)
-                                            self.ai.speak(data[keys])
+                                        self.progress.emit(f"Sam: tomorrow's weather is  {valueReturned[4]}.\n")
+                                        self.ai.speak(f"tomorrow's weather is  {valueReturned[4]}")
+
                                         break
                             elif 'forecast_weather' in valueReturned:
                                 valueReturned.remove('forecast_weather')
-                                print(valueReturned)
-
+                                self.ai.speak(f"weather on {valueReturned[0]} is {valueReturned[1]}")
+                                self.progress.emit(f"Sam: weather on {valueReturned[0]} is {valueReturned[1]}.\n")
                             # elif "list" in valueReturned:
                             #     count = 0
                             #     self.ai.speak("Certainly, Please specify the topic.")
@@ -188,23 +210,71 @@ class worker(QObject):
                             #         add_to_list(query)
                             #     elif 'delete' in query or 'remove' in query:
                           
+                            elif 'get_news' in valueReturned:
+                                self.ai.speak("Sure  ,do you have any preference or any categories of news like business, lifestyle, food, entertainment, technology, and sports ")
+                                query = self.ai.listen()
+                                valueReturned = mainTaskExecutor(query)
+                                if not 'none' in query and not 'none' in valueReturned:
+                                    self.ai.speak('Sure  ,in a moment')
+                                    # if 'top_headlines' in valueReturned:
+                                    #    self.get_headlines_by_category("business, entertainment, general, health, science, sports, technology")
+                                    if 'business_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('business')
+                                    elif 'entertainment_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('entertainment')
+                                    elif 'general_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('general')
+                                    elif 'health_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('health')
+                                    elif 'science_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('science')
+                                    elif 'sports_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('sports')
+                                    elif 'technology_news' in valueReturned:                                    
+                                        self.get_headlines_by_category('technology')
                             else:
-                                response = self.ai.understandQuery(query)
-                                self.ai.speak(response)
-                                self.progress.emit("Sam: " + response + "\n\n")
+                                # response = self.ai.understandQuery(query)
+                                # self.ai.speak(response)
+                                # self.progress.emit("Sam: " + response + "\n\n")
+                                pass
                         else:
                             counter += 1
         QCoreApplication.processEvents()
 
         self.finished.emit()
 
+
+    def get_headlines_by_category(self,categorys,max_titles=5):
+        top_headlines = newsapi.get_top_headlines(language='en',category=categorys,country='in')
+        print(top_headlines['totalResults'])
+        articles = top_headlines['articles']
+        title =[]
+        description = []
+        sources = []
+        for article in articles:
+            title.append(article['title'])
+            description.append(article['description'])
+            sources.append(article['source']['name'])
+        for i in range(max_titles):
+            # self.ai.speak(title[i])
+            # self.ai.speak(description[i])
+            # self.ai.speak('by')
+            # self.ai.speak(sources[i])
+            self.progress.emit(f"Sam: {str(title[i])}   {str(description[i])} by {str(sources[i])}\n")
+            self.ai.speak(f"{str(title[i])}   {str(description[i])} by {str(sources[i])}")
     def stop(self):
-        self.ai.timeout_flag = True
         self.is_running = False
+        self.ai.stop_flag = True
         print("recived stoping signla")
+        # self.ai.stop_speaking()
+
 
     def stopWorker(self):
         self.thread_running = False
+
+    def startWork(self):
+        self.is_running = True
+        self.ai.stop_flag = False
 
     def emitListening(self,value):
         self.listening.emit(value)
@@ -214,11 +284,13 @@ class worker(QObject):
 class ActivateThread(QThread, QObject):
     stopWork = pyqtSignal()
     stopWorker =pyqtSignal()
+    startWork = pyqtSignal()
     def __init__(self):
         super().__init__()
-        self.stopWork.connect(self.stopworkFun)
-        self.stopWorker.connect(self.stopworkerFun)
         self.worker = worker()
+        self.stopWork.connect(self.worker.stop)
+        self.stopWorker.connect(self.worker.stopWorker)
+        self.startWork.connect(self.worker.startWork)
 
         self.worker.moveToThread(self)
         self.started.connect(self.worker.run)
@@ -226,13 +298,10 @@ class ActivateThread(QThread, QObject):
         self.worker.finished.connect(self.worker.deleteLater)
         self.finished.connect(self.deleteLater)
 
-    def stopworkFun(self):
-        print("from thread")
-        self.worker.stop()
-    def stopworkerFun(self):
-        self.worker.stopWorker()
+
 class vA(QObject):
     query = 'none'
+    stop_flag = False
     listening = pyqtSignal(bool)
     speaking = pyqtSignal(bool)
     def __init__(self):
@@ -247,10 +316,20 @@ class vA(QObject):
                 self.engine.setProperty("voice",voice.id)
         self.engine.setProperty('rate',153)
 
+    # def  stop_speaking(self):
+    #     print('stop speaking')
+    #     self.onEnd(name='say',completed=False)
+
+    # def onEnd(self,name,completed):
+    #     if name == 'say':
+    #         self.engine.endLoop()
+
     def speak(self, text):
         self.speaking.emit(True)
-        self.engine.say(text)
+        self.engine.say(text,name='say')
         self.engine.runAndWait()
+        # self.engine.startLoop()
+        # self.engine.connect('finished-utterance', self.onEnd)
         self.speaking.emit(False)
 
 
@@ -267,7 +346,7 @@ class vA(QObject):
 
             except Exception as e:
                 self.query = 'none'
-
+       
         self.listening.emit(False)
         return self.query.lower()
 
@@ -992,6 +1071,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.thread.worker.finished.connect(self.clearPlainTextEdit)
         self.thread.worker.speaking.connect(self.showSpeaking)
         self.thread.worker.listening.connect(self.showListening)
+
         self.selected_voice_str  = 0
 
    
@@ -1049,7 +1129,7 @@ class Ui_MainWindow(QMainWindow, QObject):
 
     def stoping_thread(self):
         self.thread.stopWorker.emit()
-        self.generateSplash(text="Closing please wait a moment")
+        self.generateSplash(text="Closing Please Wait")
 
     def openHomePage(self):
         if self.mainMnuBtn.isChecked():
@@ -1089,9 +1169,10 @@ class Ui_MainWindow(QMainWindow, QObject):
             self.timer.setSingleShot(True)
             self.timer.singleShot(1000, self.setGreen)
             # starting worker which runs the ai
-            self.thread.start()
-
-            print("starting ai")
+            if not self.thread.isRunning():
+                self.thread.start()
+            else:
+                self.thread.startWork.emit()
 
         else:
             self.runButton.setText("START")
@@ -1107,7 +1188,7 @@ class Ui_MainWindow(QMainWindow, QObject):
 
     # progress function
     def reportProgressGui(self, value):
-        self.aiResponse.insertPlainText(str(value))
+        self.aiResponse.appendPlainText(str(value))
 
     #function to clean the ai response text area
     def clearPlainTextEdit(self):
@@ -1208,8 +1289,20 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
     MainWindow = QtWidgets.QMainWindow()
+    splash = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+    s_ui = Ui_SplashWindow()
+    s_ui.setupUi(splash)
+    s_ui.label.setStyleSheet(
+            'font-family:"Courier New";\n'
+            'font-size:52px;'
+            'font-weight:600;'
+            )
+    s_ui.label.setText('Starting Please Wait')
+    splash.show()
+    s_ui.animation.finished.connect(lambda : MainWindow.show())
+    s_ui.animation.finished.connect(lambda : splash.close())
     #connection to get the added profile using button
     ui.addProfile.clicked.connect(getEnteredProfile)
 
@@ -1225,6 +1318,5 @@ if __name__ == "__main__":
     elif current_theme == 'dark_mode':
         app.setStyleSheet(darkModeStyleSheet)
         ui.darkModeCheckBox.setChecked(True)
-
-    MainWindow.show()
+   
     sys.exit(app.exec_())

@@ -8,7 +8,6 @@ import pyowm
 from pyowm.utils import timestamps
 from datetime import datetime
 
-
 location = "Banbarad,India"
 
 open_weather_api_key='14db83cc45d773c50212aa030e74fc1a'
@@ -53,7 +52,7 @@ def openExe(query):
         detailed_status = Weather.detailed_status
         temp = Weather.temperature('celsius')['feels_like']
         humidity = Weather.humidity
-        return ['current_weather',"current weather at",location,detailed_status,temp,humidity]
+        return ['current_weather'," current weather at ",location," is ",detailed_status," temperature is ",temp," humidity is ",humidity]
 
     elif "tomorrows_weather" in query:
         forcast = current_weather.forecast_at_place(location,'3h')
@@ -62,36 +61,26 @@ def openExe(query):
         will_cloudy = forcast.will_be_cloudy_at(tomorrow)
         will_stormy = forcast.will_be_stormy_at(tomorrow)
         forecast_weather = []
-        new_date = datetime(current_date.year,current_date.month,current_date.day+1)
-        new_date = new_date.date()
+        new_date = datetime(current_date.year,current_date.month,current_date.day+1,12,0,0)
         for weather in forcast.forecast:
             if str(new_date) in weather.reference_time('iso'):
                 forecast_weather.append(
                 'reference_time:'+weather.reference_time('iso')+
                 ',status:'+weather.status+',detailed_status:'+
                 weather.detailed_status+',')
-        data_dict = {}
-        time_list = []
-        status_list = []
-        for item in forecast_weather:
-            parts = item.split(',')
-            for part in parts:
-                if 'reference_time' in part:
-                    date,time_stamp = part.split(' ')
-                    time = time_stamp.split('+')
-                    time_list.append(time[0])
-                if 'detailed_status' in part:
-                    value = part.split(':')
-                    status_list.append(value[1])
-
-        for i in range(len(time_list)):
-            data_dict[time_list[i]]=status_list[i]
-        return ['tomorrows_weather',will_sunny,will_cloudy,will_rain,will_stormy,data_dict]
+        status = "none"
+        for i in forecast_weather:
+                status = i.split(',')
+                status = status[1]
+                status = status.split(":")
+                status = status[1]
+                break
+        return ['tomorrows_weather',will_sunny,will_cloudy,will_rain,will_stormy,status]
     
     elif "forecast_weather" in query:
         forecast = current_weather.forecast_at_place(location,'3h')
         query = query.replace("forecast_weather ",'')
-        weeks = {'monday':0,'tuesday':1,'wednesday':2,'thursday':3,'friday':4,'saturday':5,'sunday':6}
+        weeks = {'monday':0,'tuesday':1,'wednesday':2,'thursday':3,'friday':4,'saturday':5,'sunday':6,'mondays':0,'tuesdays':1,'wednesdays':2,'thursdays':3,'fridays':4,'saturdays':5,'sundays':6}
         for keys in weeks.keys():
             if keys in query:
                 given_day = weeks[keys]
@@ -110,15 +99,31 @@ def openExe(query):
             if len(left_days) == 5:
                 break
             days += 1
-        forecast_weather = []
+        given_date = None
+        new = datetime(current_date.year,current_date.month,current_date.day)
         if given_day in left_days:
-            new_date = datetime(current_date.year,current_date.month,current_date.day+given_day+1)
-            new_date = new_date.date()
+            while True:
+                if new.weekday() == given_day:
+                    given_date = new
+                    break
+                new = datetime(current_date.year,current_date.month,new.day+1)
+        else:
+            return "give date or day is out of forecast range"
+        forecast_weather = []
+        given_date = datetime(given_date.year,given_date.month,given_date.day,12,0,0)
+        if given_day in left_days:
             for weather in forecast.forecast:
-                if str(new_date) in weather.reference_time('iso'):
+                if str(given_date) in weather.reference_time('iso'):
                     forecast_weather.append(
                     'reference_time:'+weather.reference_time('iso')+
                     ',status:'+weather.status+',detailed_status:'+
                     weather.detailed_status+',')
- 
-        return ['forecast_weather',forecast_weather]
+        status = None
+        for i in forecast_weather:
+            status = i.split(',')
+            status = status[1]
+            status = status.split(":")
+            status = status[1]
+            break
+
+        return ['forecast_weather',str(given_date.date()),status]

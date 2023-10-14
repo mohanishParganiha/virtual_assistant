@@ -9,8 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
+import os 
+import sys
+cd = os.path.dirname(os.path.abspath(sys.argv[0]))
+print(cd)
 class Ui_SplashWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -23,22 +25,26 @@ class Ui_SplashWindow(object):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(800, 600))
         MainWindow.setMaximumSize(QtCore.QSize(800, 600))
-        MainWindow.setStyleSheet("#frame{\n"
-"background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(247, 0, 255, 255), stop:1 rgba(0, 180, 215, 255));\n"
-"}\n"
-"#label{\n"
-"color: rgb(63, 63, 63);\n"
-"}\n"
-"#progressBar{\n"
-"background-color:rgb(222, 148, 222);\n"
-"border-style:none;\n"
-"border-radius:10px;\n"
-"}\n"
-"#progressBar::chunk{\n"
-"background-color: qlineargradient(spread:pad, x1:0, y1:0.562, x2:1, y2:0.568182, stop:0 rgba(0, 203, 255, 255), stop:1 rgba(243, 0, 255, 255));\n"
-"border-style:none;\n"
-"border-radius:10px;\n"
-"}")
+        splash_img_path = "./resource/splashScreen1.png"
+        MainWindow.setStyleSheet(
+            "#frame{\n"
+            f"background-image:url({splash_img_path});"
+            "border-style:none;\n"
+            "}\n"
+            "#label{\n"
+            "color: rgb(255, 255, 255);\n"
+            "}\n"
+            "#progressBar{\n"
+            "background-color: qlineargradient(spread:pad, x1:0, y1:0.551045, x2:1, y2:0.568, stop:0 rgba(47, 183, 195, 255), stop:1 rgba(48, 77, 137, 255));\n"
+            "border-style:none;\n"
+            "border-radius:10px;\n"
+            "}\n"
+            "#progressBar::chunk{\n"
+            "background-color: qlineargradient(spread:pad, x1:0, y1:0.551045, x2:1, y2:0.568, stop:0 rgba(50, 46, 122, 255), stop:1 rgba(46, 187, 197, 255));\n"
+            "border-style:none;\n"
+            "border-radius:10px;\n"
+            "}"
+            )
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -46,7 +52,6 @@ class Ui_SplashWindow(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setStyleSheet("")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -55,7 +60,13 @@ class Ui_SplashWindow(object):
         self.progressBar.setTextVisible(False)
         self.progressBar.setObjectName("progressBar")
         self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(10, 110, 781, 171))
+        # self.label.setText('Closing Please Wait')
+        # self.label.setStyleSheet(
+        #     'font-family:"Courier New";\n'
+        #     'font-size:52px;'
+        #     'font-weight:600;'
+        #     )
+        self.label.setGeometry(QtCore.QRect(10, 110, 781, 200))
         self.label.setTextFormat(QtCore.Qt.AutoText)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
@@ -73,9 +84,9 @@ class Ui_SplashWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         # self.label.setText(_translate("MainWindow", "Closing please wait a moment"))
 
-    def animateClosing(self):
+    def animateClosing(self,duration = 4000):
         self.animation = QtCore.QPropertyAnimation(self.progressBar,b"value")
-        self.animation.setDuration(4000)
+        self.animation.setDuration(duration)
         self.animation.setStartValue(0)
         self.animation.setEndValue(100)
         self.animation.start()
