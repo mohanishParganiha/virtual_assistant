@@ -11,8 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os 
 import sys
-cd = os.path.dirname(os.path.abspath(sys.argv[0]))
-print(cd)
+
 class Ui_SplashWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

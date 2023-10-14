@@ -31,7 +31,7 @@ newsapi = NewsApiClient(api_key='f871d1b4a83f468a8af0179a474618c2')
 
 
 engine = pyttsx3.init()
-cd = os.path.dirname(os.path.abspath(sys.argv[0]))
+# cd = os.path.dirname(os.path.abspath(sys.argv[0]))
 #add the list of voices availabe in the system
 def updateVoices():
     ls = []
@@ -40,12 +40,12 @@ def updateVoices():
     loadOnStartup['settings'][0]['available_voices'] = ls
 
     #loading the settings into program
-    with open(cd+"\\data\\loadOnStartup.json","w") as file:
+    with open("./data/loadOnStartup.json","w") as file:
         json.dump(loadOnStartup,file,indent=4)
 
 #loading settings json
 def loadSettigns():
-    with open(cd+"\\data\\loadOnStartup.json", 'r') as file:
+    with open("./data/loadOnStartup.json", 'r') as file:
         loadOnStartup = json.load(file)
 
     return loadOnStartup
@@ -65,10 +65,10 @@ else:
     openai.api_key = "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"
 
 
-with open(cd+"\\data\\darkModeStyleSheet.txt","r") as file:
+with open("./data/darkModeStyleSheet.txt","r") as file:
         darkModeStyleSheet = file.read()
 
-with open(cd+"\\data\\lightModeStyleSheet.txt","r") as file:
+with open("./data/lightModeStyleSheet.txt","r") as file:
         lightModeStyleSheet = file.read()
 
 
@@ -456,7 +456,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.mainMnuBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.mainMnuBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.mainMnuBtn.setText("")
-        icon = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg")
+        icon = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/apps/24/homerun.svg")
         # icon.addPixmap(
         #     QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/apps/24/homerun.svg"),
         #     QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -482,7 +482,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.secondWindowBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.secondWindowBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.secondWindowBtn.setText("")
-        icon1 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg")
+        icon1 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg")
         # icon1.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/arrow-up-double.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.secondWindowBtn.setIcon(icon1)
@@ -506,7 +506,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.settingBtn.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.settingBtn.setStyleSheet("")
         self.settingBtn.setText("")
-        icon2 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg")
+        icon2 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg")
         # icon2.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/22/settings-configure.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.settingBtn.setIcon(icon2)
@@ -531,7 +531,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.profileBtn.setMaximumSize(QtCore.QSize(50, 50))
         self.profileBtn.setFocusPolicy(QtCore.Qt.NoFocus)
         self.profileBtn.setText("")
-        icon3 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg")
+        icon3 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg")
         # icon3.addPixmap(QtGui.QPixmap(cd+"/resource/Breeze KDE-Story-Dark/actions/16/amarok_artist.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.profileBtn.setIcon(icon3)
@@ -553,7 +553,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.pushButton_3.setSizePolicy(sizePolicy)
         self.pushButton_3.setMinimumSize(QtCore.QSize(50, 50))
         self.pushButton_3.setText("")
-        icon4 = QtGui.QIcon(cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg")
+        icon4 = QtGui.QIcon("./resource/Breeze KDE-Story-Dark/actions/24/window-close.svg")
         # icon4.addPixmap(QtGui.QPixmap(
         #     cd+"/resource/Breeze KDE-Story-Dark/actions/24/window-close.svg"),
         #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -645,7 +645,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.micInputShow.setMinimumSize(QtCore.QSize(30, 30))
         self.micInputShow.setMaximumSize(QtCore.QSize(30, 30))
         self.micInputShow.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+        self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
 
         self.speakOutShow = QtSvg.QSvgWidget(parent=self.widget_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -656,7 +656,7 @@ class Ui_MainWindow(QMainWindow, QObject):
         self.speakOutShow.setMinimumSize(QtCore.QSize(30, 30))
         self.speakOutShow.setMaximumSize(QtCore.QSize(30, 30))
         self.speakOutShow.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+        self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
 
     
         self.horizontalLayout_4.addWidget(self.micInputShow)
@@ -1098,15 +1098,15 @@ class Ui_MainWindow(QMainWindow, QObject):
        
     def showSpeaking(self,isSpeaking:bool):
         if isSpeaking:
-            self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-on.svg")
+            self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-on.svg")
         else:
-            self.speakOutShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
+            self.speakOutShow.load("./resource/Breeze KDE-Story-Dark/status/22/audio-off.svg")
 
     def showListening(self,isListening:bool):
         if isListening:
-            self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-ready.svg")
+            self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-ready.svg")
         else:
-            self.micInputShow.load(cd+"/resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
+            self.micInputShow.load("./resource/Breeze KDE-Story-Dark/status/22/mic-off.svg")
 
 
     def generateSplash(self,text):
@@ -1239,7 +1239,7 @@ def getEnteredProfile():
 
 #function that sets the field in settings json file
 def update_load_file(selected_voice=None, selected_profile=None, added_profile=None, entered_api_key=None,theme=None):
-        with open(cd+'\\data\\loadOnStartup.json','r') as file:
+        with open('./data/loadOnStartup.json','r') as file:
             loadOnStartup = json.load(file)
             
         if entered_api_key is not None and api_key!=entered_api_key and entered_api_key !='' :
@@ -1258,7 +1258,7 @@ def update_load_file(selected_voice=None, selected_profile=None, added_profile=N
             profiles.append(added_profile)
             loadOnStartup['profile'][0]['available_profiles'] = profiles
 
-        with open(cd+"\\data\\loadOnStartup.json","w") as file:
+        with open("./data/loadOnStartup.json","w") as file:
             json.dump(loadOnStartup,file,indent=4)
 
 
@@ -1274,7 +1274,7 @@ def themeSet():
         reloadTheme()
 
 def reloadTheme():
-    with open(cd+"\\data\\loadOnStartup.json",'r') as file:
+    with open("./data/loadOnStartup.json",'r') as file:
         reloadedSettings = json.load(file)
     current_theme = reloadedSettings['settings'][0]['theme']
     
